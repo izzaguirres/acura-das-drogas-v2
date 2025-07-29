@@ -183,8 +183,7 @@ export function VideoIntro() {
               {/* Vídeo */}
               <video
                 ref={videoRef}
-                className="w-full h-full object-cover"
-                poster="/images/video-poster.jpg"
+                className="w-full h-full object-contain bg-black"
                 preload="metadata"
                 onError={() => {
                   // Fallback quando vídeo não carrega

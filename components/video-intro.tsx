@@ -2,64 +2,166 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Volume2, VolumeX, Play } from "lucide-react"
+import { Volume2, VolumeX, Play, Pause, Maximize2, RotateCcw } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 export function VideoIntro() {
-  const videoRef = useRef<HTMLIFrameElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [showControls, setShowControls] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
 
+  // Formatar tempo em MM:SS
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
+
+  // Atualizar tempo do vídeo
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const updateTime = () => setCurrentTime(video.currentTime)
+    const updateDuration = () => setDuration(video.duration)
+
+    video.addEventListener('timeupdate', updateTime)
+    video.addEventListener('loadedmetadata', updateDuration)
+
+    return () => {
+      video.removeEventListener('timeupdate', updateTime)
+      video.removeEventListener('loadedmetadata', updateDuration)
+    }
+  }, [])
+
+  // Intersection Observer para autoplay
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && videoRef.current && !hasInteracted) {
-            // Adiciona autoplay=1 quando o vídeo entra na viewport (sem som inicialmente)
-            const currentSrc = videoRef.current.src
-            if (!currentSrc.includes('autoplay=1')) {
-              videoRef.current.src = currentSrc.replace('autoplay=0', 'autoplay=1')
-            }
+            videoRef.current.play().catch(() => {
+              // Fallback se autoplay falhar
+              setIsPlaying(false)
+            })
+            setIsPlaying(true)
           }
         })
       },
-      { threshold: 0.5 } // Dispara quando 50% do vídeo está visível
+      { threshold: 0.5 }
     )
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current)
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
     }
 
     return () => observer.disconnect()
   }, [hasInteracted])
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      const currentSrc = videoRef.current.src
-      if (isMuted) {
-        // Ativa o som
-        videoRef.current.src = currentSrc.replace('mute=1', 'mute=0')
-        setIsMuted(false)
-      } else {
-        // Desativa o som
-        videoRef.current.src = currentSrc.replace('mute=0', 'mute=1')
-        setIsMuted(true)
+  // Controles de mouse
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+    const container = containerRef.current
+
+    const hideControls = () => {
+      if (isPlaying) {
+        timeout = setTimeout(() => setShowControls(false), 3000)
       }
-      setHasInteracted(true)
+    }
+
+    const showControls = () => {
+      setShowControls(true)
+      clearTimeout(timeout)
+    }
+
+    if (container) {
+      container.addEventListener('mousemove', showControls)
+      container.addEventListener('mouseleave', hideControls)
+      container.addEventListener('mouseenter', showControls)
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('mousemove', showControls)
+        container.removeEventListener('mouseleave', hideControls)
+        container.removeEventListener('mouseenter', showControls)
+      }
+      clearTimeout(timeout)
+    }
+  }, [isPlaying])
+
+  const togglePlay = () => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (isPlaying) {
+      video.pause()
+      setIsPlaying(false)
+    } else {
+      video.play()
+      setIsPlaying(true)
+    }
+    setHasInteracted(true)
+  }
+
+  const toggleMute = () => {
+    const video = videoRef.current
+    if (!video) return
+
+    video.muted = !video.muted
+    setIsMuted(video.muted)
+    setHasInteracted(true)
+  }
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current
+    if (!video) return
+
+    const time = (parseFloat(e.target.value) / 100) * duration
+    video.currentTime = time
+    setCurrentTime(time)
+  }
+
+  const toggleFullscreen = () => {
+    const container = containerRef.current
+    if (!container) return
+
+    if (!isFullscreen) {
+      if (container.requestFullscreen) {
+        container.requestFullscreen()
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      }
     }
   }
 
-  const playWithSound = () => {
-    if (videoRef.current) {
-      const currentSrc = videoRef.current.src
-      // Remove mute e adiciona autoplay
-      videoRef.current.src = currentSrc
-        .replace('mute=1', 'mute=0')
-        .replace('autoplay=0', 'autoplay=1')
-      setIsMuted(false)
-      setHasInteracted(true)
-    }
+  const restart = () => {
+    const video = videoRef.current
+    if (!video) return
+
+    video.currentTime = 0
+    setCurrentTime(0)
+    video.play()
+    setIsPlaying(true)
   }
+
+  // Detectar mudanças no fullscreen
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
 
   return (
     <section className="py-16 bg-muted/30">
@@ -72,53 +174,144 @@ export function VideoIntro() {
             </p>
           </div>
 
-          <Card className="overflow-hidden rounded-2xl relative">
-            <div className="aspect-video bg-muted relative">
-              <iframe
+          <Card className="overflow-hidden rounded-2xl">
+            <div 
+              ref={containerRef}
+              className="aspect-video bg-black relative group cursor-pointer"
+              onClick={togglePlay}
+            >
+              {/* Vídeo */}
+              <video
                 ref={videoRef}
-                src="https://www.youtube.com/embed/l1YcjnY3goQ?start=5&autoplay=0&rel=0&modestbranding=1&mute=1"
-                title="A Cura das Drogas - Vídeo de Apresentação"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-              
-              {/* Controles de som */}
-              <div className="absolute bottom-4 right-4 flex gap-2">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={toggleMute}
-                  className="bg-black/70 hover:bg-black/80 text-white backdrop-blur-sm"
-                >
-                  {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                </Button>
-                
-                {isMuted && (
+                className="w-full h-full object-cover"
+                poster="/images/video-poster.jpg"
+                preload="metadata"
+              >
+                <source src="/videos/apresentacao.mp4" type="video/mp4" />
+                <source src="/videos/apresentacao.webm" type="video/webm" />
+                Seu navegador não suporta vídeos.
+              </video>
+
+              {/* Overlay de play central */}
+              {!isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                  <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-2xl">
+                    <Play className="w-8 h-8 text-black ml-1" />
+                  </div>
+                </div>
+              )}
+
+              {/* Controles */}
+              <div 
+                className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
+                  showControls ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {/* Barra de progresso */}
+                <div className="mb-3">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={duration ? (currentTime / duration) * 100 : 0}
+                    onChange={handleSeek}
+                    className="w-full h-1 bg-white/30 rounded-full appearance-none cursor-pointer slider"
+                    style={{
+                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${duration ? (currentTime / duration) * 100 : 0}%, rgba(255,255,255,0.3) ${duration ? (currentTime / duration) * 100 : 0}%, rgba(255,255,255,0.3) 100%)`
+                    }}
+                  />
+                </div>
+
+                {/* Controles inferiores */}
+                <div className="flex items-center justify-between text-white">
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        togglePlay()
+                      }}
+                      className="text-white hover:bg-white/20 p-2"
+                    >
+                      {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleMute()
+                      }}
+                      className="text-white hover:bg-white/20 p-2"
+                    >
+                      {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        restart()
+                      }}
+                      className="text-white hover:bg-white/20 p-2"
+                    >
+                      <RotateCcw className="w-5 h-5" />
+                    </Button>
+
+                    <span className="text-sm font-mono">
+                      {formatTime(currentTime)} / {formatTime(duration)}
+                    </span>
+                  </div>
+
                   <Button
                     size="sm"
-                    variant="default"
-                    onClick={playWithSound}
-                    className="bg-primary hover:bg-primary/90"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toggleFullscreen()
+                    }}
+                    className="text-white hover:bg-white/20 p-2"
                   >
-                    <Play className="w-4 h-4 mr-1" />
-                    Com Som
+                    <Maximize2 className="w-5 h-5" />
                   </Button>
-                )}
+                </div>
               </div>
+
+              {/* Indicador de carregamento */}
+              {!hasInteracted && (
+                <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+                  Clique para ativar o som
+                </div>
+              )}
             </div>
           </Card>
-          
-          {isMuted && (
-            <div className="text-center mt-4">
-              <p className="text-sm text-muted-foreground">
-                💡 Clique em "Com Som" para ativar o áudio do vídeo
-              </p>
-            </div>
-          )}
         </div>
       </div>
+
+      <style jsx>{`
+        .slider::-webkit-slider-thumb {
+          appearance: none;
+          height: 12px;
+          width: 12px;
+          border-radius: 50%;
+          background: #3b82f6;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+          height: 12px;
+          width: 12px;
+          border-radius: 50%;
+          background: #3b82f6;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+      `}</style>
     </section>
   )
 }

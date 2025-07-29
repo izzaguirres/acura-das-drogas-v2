@@ -30,13 +30,21 @@ export function VideoIntro() {
 
     const updateTime = () => setCurrentTime(video.currentTime)
     const updateDuration = () => setDuration(video.duration)
+    const updatePlaying = () => setIsPlaying(!video.paused)
+    const updateMuted = () => setIsMuted(video.muted)
 
     video.addEventListener('timeupdate', updateTime)
     video.addEventListener('loadedmetadata', updateDuration)
+    video.addEventListener('play', updatePlaying)
+    video.addEventListener('pause', updatePlaying)
+    video.addEventListener('volumechange', updateMuted)
 
     return () => {
       video.removeEventListener('timeupdate', updateTime)
       video.removeEventListener('loadedmetadata', updateDuration)
+      video.removeEventListener('play', updatePlaying)
+      video.removeEventListener('pause', updatePlaying)
+      video.removeEventListener('volumechange', updateMuted)
     }
   }, [])
 
@@ -100,14 +108,18 @@ export function VideoIntro() {
     const video = videoRef.current
     if (!video) return
 
-    if (isPlaying) {
+    if (video.paused) {
+      video.play().then(() => {
+        setIsPlaying(true)
+        setHasInteracted(true)
+      }).catch(() => {
+        setIsPlaying(false)
+      })
+    } else {
       video.pause()
       setIsPlaying(false)
-    } else {
-      video.play()
-      setIsPlaying(true)
+      setHasInteracted(true)
     }
-    setHasInteracted(true)
   }
 
   const toggleMute = () => {
@@ -123,7 +135,8 @@ export function VideoIntro() {
     const video = videoRef.current
     if (!video) return
 
-    const time = (parseFloat(e.target.value) / 100) * duration
+    const percentage = parseFloat(e.target.value)
+    const time = (percentage / 100) * video.duration
     video.currentTime = time
     setCurrentTime(time)
   }
@@ -174,16 +187,16 @@ export function VideoIntro() {
             </p>
           </div>
 
-          <Card className="overflow-hidden rounded-2xl">
+          <div className="flex justify-center">
             <div 
               ref={containerRef}
-              className="aspect-video bg-black relative group cursor-pointer"
+              className="aspect-[9/16] bg-black relative group cursor-pointer w-[280px] md:w-[320px] lg:w-[350px] rounded-2xl overflow-hidden"
               onClick={togglePlay}
             >
               {/* Vídeo */}
               <video
                 ref={videoRef}
-                className="w-full h-full object-contain bg-black"
+                className="w-full h-full object-cover bg-black"
                 preload="metadata"
                 onError={() => {
                   // Fallback quando vídeo não carrega
@@ -215,20 +228,20 @@ export function VideoIntro() {
                   showControls ? 'opacity-100' : 'opacity-0'
                 }`}
               >
-                {/* Barra de progresso */}
-                <div className="mb-3">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={duration ? (currentTime / duration) * 100 : 0}
-                    onChange={handleSeek}
-                    className="w-full h-1 bg-white/30 rounded-full appearance-none cursor-pointer slider"
-                    style={{
-                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${duration ? (currentTime / duration) * 100 : 0}%, rgba(255,255,255,0.3) ${duration ? (currentTime / duration) * 100 : 0}%, rgba(255,255,255,0.3) 100%)`
-                    }}
-                  />
-                </div>
+                                 {/* Barra de progresso */}
+                 <div className="mb-3">
+                   <input
+                     type="range"
+                     min="0"
+                     max="100"
+                     value={videoRef.current?.duration ? (currentTime / videoRef.current.duration) * 100 : 0}
+                     onChange={handleSeek}
+                     className="w-full h-1 bg-white/30 rounded-full appearance-none cursor-pointer slider"
+                     style={{
+                       background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${videoRef.current?.duration ? (currentTime / videoRef.current.duration) * 100 : 0}%, rgba(255,255,255,0.3) ${videoRef.current?.duration ? (currentTime / videoRef.current.duration) * 100 : 0}%, rgba(255,255,255,0.3) 100%)`
+                     }}
+                   />
+                 </div>
 
                 {/* Controles inferiores */}
                 <div className="flex items-center justify-between text-white">
@@ -269,9 +282,9 @@ export function VideoIntro() {
                       <RotateCcw className="w-5 h-5" />
                     </Button>
 
-                    <span className="text-sm font-mono">
-                      {formatTime(currentTime)} / {formatTime(duration)}
-                    </span>
+                                         <span className="text-sm font-mono">
+                       {formatTime(currentTime)} / {formatTime(videoRef.current?.duration || 0)}
+                     </span>
                   </div>
 
                   <Button
@@ -294,8 +307,8 @@ export function VideoIntro() {
                   Clique para ativar o som
                 </div>
               )}
+                          </div>
             </div>
-          </Card>
         </div>
       </div>
 

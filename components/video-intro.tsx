@@ -186,10 +186,19 @@ export function VideoIntro() {
                 className="w-full h-full object-cover"
                 poster="/images/video-poster.jpg"
                 preload="metadata"
+                onError={() => {
+                  // Fallback quando vídeo não carrega
+                  console.log('Vídeo não encontrado, mostrando placeholder')
+                }}
               >
                 <source src="/videos/apresentacao.mp4" type="video/mp4" />
                 <source src="/videos/apresentacao.webm" type="video/webm" />
-                Seu navegador não suporta vídeos.
+                <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
+                  <div className="text-center">
+                    <p className="text-lg mb-2">Vídeo de apresentação</p>
+                    <p className="text-sm text-gray-400">Adicione o arquivo apresentacao.mp4 na pasta public/videos/</p>
+                  </div>
+                </div>
               </video>
 
               {/* Overlay de play central */}

@@ -1,217 +1,246 @@
 import type { Metadata } from "next"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Heart, MessageCircle, Printer, BookOpen } from "lucide-react"
+import { MessageCircle, Printer, BookOpen, Truck, Users, Sparkles, Copy, Building2 } from "lucide-react"
 import { DonationMethods } from "@/components/donation-methods"
 import { printCosts, contacts } from "@/content/data"
 
 export const metadata: Metadata = {
-  title: "Doar",
-  description: "Faça uma doação para a produção e distribuição de livros físicos do projeto A Cura das Drogas.",
+  title: "Faça uma Doação | Ajude a Imprimir Livros",
+  description: "Sua doação financia a impressão e distribuição gratuita de livros para presidiários. Transparência total nos custos e impacto direto.",
+  keywords: [
+    "doar para projeto social",
+    "apoiar evangelização presídios",
+    "doação livro cristão",
+    "financiamento coletivo missionário",
+    "como doar cura das drogas",
+    "custo impressão livro",
+    "ajuda humanitária prisões"
+  ],
+  openGraph: {
+    title: "Sua doação leva cura para dentro das celas",
+    description: "Veja exatamente para onde vai seu dinheiro: Impressão, logística e entrega de livros transformadores.",
+    images: [
+      {
+        url: "/images/header.png",
+        width: 1200,
+        height: 630,
+        alt: "Doe para o projeto A Cura das Drogas",
+      },
+    ],
+  }
 }
 
 export default function DonatePage() {
-  const usageList = [
-    "Impressão de novas cópias do livro",
-    "Distribuição gratuita para comunidades carentes",
-    "Entrega em centros de reabilitação e presídios",
-    "Materiais educativos complementares",
-    "Logística de distribuição",
+  const impactMetrics = [
+    {
+      icon: <Printer className="w-8 h-8 text-primary" />,
+      title: "Impressão",
+      description: "Produção de alta qualidade do livro físico para leitura."
+    },
+    {
+      icon: <Truck className="w-8 h-8 text-primary" />,
+      title: "Logística",
+      description: "Transporte seguro até presídios e comunidades distantes."
+    },
+    {
+      icon: <Users className="w-8 h-8 text-primary" />,
+      title: "Alcance",
+      description: "Distribuição gratuita em mãos para quem mais precisa."
+    },
+    {
+      icon: <Sparkles className="w-8 h-8 text-primary" />,
+      title: "Material Extra",
+      description: "Guias de estudo e acompanhamento para reabilitação."
+    }
   ]
 
   const faqItems = [
     {
       question: "Como posso ter certeza de que minha doação será bem utilizada?",
-      answer:
-        "Mantemos total transparência sobre o uso dos recursos. Em breve, disponibilizaremos relatórios periódicos sobre as ações realizadas.",
+      answer: "Mantemos total transparência. Disponibilizamos relatórios periódicos e você pode acompanhar nossas ações no Instagram.",
     },
     {
       question: "Posso doar livros físicos ao invés de dinheiro?",
-      answer: "Sim! Entre em contato conosco pelo WhatsApp para combinarmos a doação de exemplares físicos.",
+      answer: "Sim! Se você tem acesso a uma gráfica ou quer doar exemplares comprados, entre em contato pelo WhatsApp.",
     },
     {
-      question: "Vocês emitem recibo de doação?",
-      answer:
-        "Sim, emitimos comprovante para todas as doações. Envie seu comprovante pelo WhatsApp que retornaremos com o recibo.",
-    },
-    {
-      question: "Qual o valor mínimo para doação?",
-      answer: "Não há valor mínimo. Qualquer quantia é bem-vinda e fará diferença na vida de alguém.",
+      question: "Vocês emitem recibo?",
+      answer: "Sim. Após a transferência, envie o comprovante pelo WhatsApp e emitiremos seu recibo oficial de doação.",
     },
   ]
 
+  // JSON-LD para FAQ (Perguntas Frequentes)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  }
+
   return (
-    <div className="py-16">
-      <div className="container">
-        {/* Hero */}
-        <section className="text-center mb-16 wave-pattern -mx-4 px-4 py-16 rounded-2xl">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <Heart className="w-8 h-8 text-green-600" />
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight">Faça uma Doação para a Produção dos Livros Físicos</h1>
-            <p className="text-xl text-muted-foreground">
-              Sua contribuição possibilita que levemos uma mensagem de esperança e transformação para pessoas que mais
-              precisam.
-            </p>
+    <div className="min-h-screen bg-slate-50 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
+      {/* Hero Section */}
+      <section className="relative py-20 lg:py-28 bg-primary overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/images/header.png')] opacity-10 bg-cover bg-center mix-blend-overlay" />
+        <div className="container relative z-10 text-center text-white space-y-6">
+          <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-sm rounded-full mb-4 border border-white/20">
+            <Heart className="w-6 h-6 text-white fill-current mr-2" />
+            <span className="font-medium tracking-wide">Faça parte dessa missão</span>
           </div>
-        </section>
+          
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight max-w-4xl mx-auto leading-tight">
+            Sua doação imprime esperança e liberta vidas
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto font-light">
+            100% das doações são destinadas à produção e distribuição do livro "A Cura das Drogas" em presídios.
+          </p>
+        </div>
+        
+        {/* Curved Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-slate-50 rounded-t-[50%]" />
+      </section>
 
-        {/* How Donation Will Be Used */}
-        <section className="mb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Como sua doação será utilizada</h2>
-              <p className="text-lg text-muted-foreground">
-                Cada real doado é investido diretamente na missão de transformar vidas
-              </p>
-            </div>
+      <div className="container -mt-12 relative z-20">
+        {/* Impact Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          {impactMetrics.map((item, index) => (
+            <Card key={index} className="p-6 text-center hover:shadow-lg transition-all duration-300 border-none shadow-md group">
+              <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                <div className="group-hover:text-white transition-colors">
+                  {item.icon}
+                </div>
+              </div>
+              <h3 className="font-bold text-lg mb-2 text-slate-900">{item.title}</h3>
+              <p className="text-slate-500 text-sm">{item.description}</p>
+            </Card>
+          ))}
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {usageList.map((item, index) => (
-                <Card key={index} className="p-6 rounded-2xl hover:shadow-lg transition-shadow">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-green-600 font-bold text-sm">{index + 1}</span>
-                      </div>
+        <div className="grid lg:grid-cols-12 gap-12">
+          {/* Main Content (Left) */}
+          <div className="lg:col-span-7 space-y-12">
+            
+            {/* Donation Methods */}
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-8 w-1 bg-primary rounded-full" />
+                <h2 className="text-2xl font-bold text-slate-900">Faça sua Doação</h2>
+              </div>
+              <DonationMethods />
+            </section>
+
+            {/* Cost Transparency */}
+            <section>
+               <div className="flex items-center gap-3 mb-6">
+                <div className="h-8 w-1 bg-slate-300 rounded-full" />
+                <h2 className="text-2xl font-bold text-slate-900">Transparência de Custos</h2>
+              </div>
+              
+              <div className="grid gap-6">
+                <Card className="overflow-hidden border-none shadow-lg bg-white">
+                  <div className="bg-slate-900 p-4 text-white flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">🇪🇸</span>
+                      <h3 className="font-bold">Custos Espanha</h3>
                     </div>
-                    <p className="text-muted-foreground">{item}</p>
+                    <span className="text-xs bg-white/20 px-2 py-1 rounded">Euro (€)</span>
+                  </div>
+                  <div className="p-0">
+                    {printCosts.spain.map((cost, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border-b last:border-0 hover:bg-slate-50 transition-colors">
+                        <div>
+                          <p className="font-bold text-lg text-slate-800">{cost.quantity} Livros</p>
+                          <p className="text-xs text-slate-500 uppercase tracking-wider">{cost.size}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-xl text-primary">{cost.price}</p>
+                          <p className="text-xs text-slate-400">Custo total</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* Cost Table */}
-        <section className="mb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Custos Estimados de Impressão</h2>
-              <p className="text-lg text-muted-foreground">Valores informativos sujeitos a orçamento e fornecedor</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Spain */}
-              <Card className="p-6 rounded-2xl">
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center space-x-2">
-                    <Printer className="w-5 h-5" />
-                    <span>Espanha</span>
-                  </h3>
-                  <div className="space-y-3">
-                    {printCosts.spain.map((cost, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-muted rounded-lg">
-                        <div>
-                          <p className="font-medium">{cost.quantity} cópias</p>
-                          <p className="text-sm text-muted-foreground">{cost.size}</p>
-                        </div>
-                        <p className="font-bold text-primary">{cost.price}</p>
-                      </div>
-                    ))}
+                <Card className="overflow-hidden border-none shadow-lg bg-white">
+                  <div className="bg-green-700 p-4 text-white flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">🇧🇷</span>
+                      <h3 className="font-bold">Custos Brasil</h3>
+                    </div>
+                    <span className="text-xs bg-white/20 px-2 py-1 rounded">Real (R$)</span>
                   </div>
-                </div>
-              </Card>
-
-              {/* Brazil */}
-              <Card className="p-6 rounded-2xl">
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center space-x-2">
-                    <Printer className="w-5 h-5" />
-                    <span>Brasil</span>
-                  </h3>
-                  <div className="space-y-3">
+                  <div className="p-0">
                     {printCosts.brazil.map((cost, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-muted rounded-lg">
+                      <div key={index} className="flex items-center justify-between p-4 border-b last:border-0 hover:bg-slate-50 transition-colors">
                         <div>
-                          <p className="font-medium">{cost.quantity} cópias</p>
-                          <p className="text-sm text-muted-foreground">{cost.size}</p>
+                          <p className="font-bold text-lg text-slate-800">{cost.quantity} Livros</p>
+                          <p className="text-xs text-slate-500 uppercase tracking-wider">{cost.size}</p>
                         </div>
-                        <p className="font-bold text-primary">{cost.price}</p>
+                        <div className="text-right">
+                          <p className="font-bold text-xl text-primary">{cost.price}</p>
+                          <p className="text-xs text-slate-400">Custo total</p>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              </Card>
-            </div>
-
-            <div className="text-center mt-6">
-              <p className="text-sm text-muted-foreground">
-                * Valores sujeitos a alteração conforme orçamento e fornecedor
-              </p>
-            </div>
+                </Card>
+              </div>
+              <p className="text-center text-xs text-muted-foreground mt-4">* Valores estimados sujeitos a cotação do dia e fornecedor.</p>
+            </section>
           </div>
-        </section>
 
-        {/* Donation Methods */}
-        <section className="mb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Formas de Doação</h2>
-              <p className="text-lg text-muted-foreground">Escolha a forma mais conveniente para você</p>
-            </div>
-
-            <DonationMethods />
-          </div>
-        </section>
-
-        {/* Send Receipt CTA */}
-        <section className="mb-16">
-          <Card className="max-w-2xl mx-auto p-8 text-center rounded-2xl bg-green-50 border-green-200">
-            <div className="space-y-4">
-              <MessageCircle className="w-12 h-12 text-green-600 mx-auto" />
-              <h3 className="text-2xl font-bold">Envie seu Comprovante</h3>
-              <p className="text-muted-foreground">
-                Após fazer sua doação, envie o comprovante pelo WhatsApp para recebermos e emitirmos seu recibo oficial.
+          {/* Sidebar (Right) */}
+          <div className="lg:col-span-5 space-y-8">
+             {/* Receipt CTA */}
+            <Card className="p-8 bg-gradient-to-br from-slate-900 to-slate-800 text-white border-none shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-primary/20 rounded-full blur-2xl" />
+              
+              <MessageCircle className="w-10 h-10 text-primary mb-6" />
+              <h3 className="text-2xl font-bold mb-2">Já fez sua doação?</h3>
+              <p className="text-slate-300 mb-8 leading-relaxed">
+                Envie o comprovante para nossa equipe. Queremos agradecer e prestar contas de cada centavo recebido.
               </p>
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-lg px-8" asChild>
+              <Button size="lg" className="w-full bg-primary hover:bg-primary/90 text-white font-semibold h-12 shadow-lg shadow-primary/20" asChild>
                 <a
-                  href="https://wa.me/+34673017500?text=Ol%C3%A1,%20vim%20do%20site%20%20e%20quero%20enviar%20o%20comprovante%20da%20transfer%C3%AAncia%20que%20fiz%20para%20ajudar%20no%20projeto!"
+                  href="https://wa.me/+34673017500?text=Ol%C3%A1,%20vim%20do%20site%20e%20quero%20enviar%20o%20comprovante!"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Enviar Comprovante
+                  Enviar Comprovante no WhatsApp
                 </a>
               </Button>
-            </div>
-          </Card>
-        </section>
+            </Card>
 
-        {/* FAQ */}
-        <section className="mb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Perguntas Frequentes</h2>
-            </div>
-
-            <div className="space-y-4">
-              {faqItems.map((item, index) => (
-                <Card key={index} className="p-6 rounded-2xl">
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">{item.question}</h3>
-                    <p className="text-muted-foreground">{item.answer}</p>
+            {/* FAQ Mini */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+              <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                <span className="w-1 h-6 bg-yellow-400 rounded-full" />
+                Dúvidas Comuns
+              </h3>
+              <div className="space-y-4">
+                {faqItems.map((item, index) => (
+                  <div key={index} className="pb-4 border-b last:border-0 last:pb-0 border-slate-100">
+                    <h4 className="font-medium text-slate-900 text-sm mb-1">{item.question}</h4>
+                    <p className="text-slate-500 text-xs leading-relaxed">{item.answer}</p>
                   </div>
-                </Card>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </section>
-
-        {/* Transparency */}
-        <section>
-          <Card className="max-w-4xl mx-auto p-8 text-center rounded-2xl bg-primary/5 border-primary/20">
-            <div className="space-y-4">
-              <BookOpen className="w-12 h-12 text-primary mx-auto" />
-              <h3 className="text-2xl font-bold">Transparência Total</h3>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Acreditamos na importância da transparência. Em breve, disponibilizaremos relatórios periódicos sobre
-                como os recursos estão sendo utilizados e o impacto gerado pelo projeto.
-              </p>
-            </div>
-          </Card>
-        </section>
+        </div>
       </div>
     </div>
   )

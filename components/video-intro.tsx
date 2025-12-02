@@ -1,338 +1,175 @@
 "use client"
 
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Volume2, VolumeX, Play, Pause, Maximize2, RotateCcw } from "lucide-react"
+import { Volume2, VolumeX, Play, Pause, CheckCircle2, Sparkles } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { cn } from "@/lib/utils"
 
 export function VideoIntro() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(true)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [showControls, setShowControls] = useState(true)
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
 
-  // Formatar tempo em MM:SS
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60)
-    const seconds = Math.floor(time % 60)
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`
-  }
-
-  // Atualizar tempo do vídeo
+  // Update video state listeners
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    const updateTime = () => setCurrentTime(video.currentTime)
-    const updateDuration = () => setDuration(video.duration)
     const updatePlaying = () => setIsPlaying(!video.paused)
     const updateMuted = () => setIsMuted(video.muted)
 
-    video.addEventListener('timeupdate', updateTime)
-    video.addEventListener('loadedmetadata', updateDuration)
     video.addEventListener('play', updatePlaying)
     video.addEventListener('pause', updatePlaying)
     video.addEventListener('volumechange', updateMuted)
 
     return () => {
-      video.removeEventListener('timeupdate', updateTime)
-      video.removeEventListener('loadedmetadata', updateDuration)
       video.removeEventListener('play', updatePlaying)
       video.removeEventListener('pause', updatePlaying)
       video.removeEventListener('volumechange', updateMuted)
     }
   }, [])
 
-  // Intersection Observer para autoplay
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && videoRef.current && !hasInteracted) {
-            videoRef.current.play().catch(() => {
-              // Fallback se autoplay falhar
-              setIsPlaying(false)
-            })
-            setIsPlaying(true)
-          }
-        })
-      },
-      { threshold: 0.5 }
-    )
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [hasInteracted])
-
-  // Controles de mouse
-  useEffect(() => {
-    let timeout: NodeJS.Timeout
-    const container = containerRef.current
-
-    const hideControls = () => {
-      if (isPlaying) {
-        timeout = setTimeout(() => setShowControls(false), 3000)
-      }
-    }
-
-    const showControls = () => {
-      setShowControls(true)
-      clearTimeout(timeout)
-    }
-
-    if (container) {
-      container.addEventListener('mousemove', showControls)
-      container.addEventListener('mouseleave', hideControls)
-      container.addEventListener('mouseenter', showControls)
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('mousemove', showControls)
-        container.removeEventListener('mouseleave', hideControls)
-        container.removeEventListener('mouseenter', showControls)
-      }
-      clearTimeout(timeout)
-    }
-  }, [isPlaying])
-
   const togglePlay = () => {
     const video = videoRef.current
     if (!video) return
 
     if (video.paused) {
-      video.play().then(() => {
-        setIsPlaying(true)
-        setHasInteracted(true)
-      }).catch(() => {
-        setIsPlaying(false)
-      })
+      video.play()
+      setIsPlaying(true)
+      setHasInteracted(true)
     } else {
       video.pause()
       setIsPlaying(false)
-      setHasInteracted(true)
     }
   }
 
-  const toggleMute = () => {
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation()
     const video = videoRef.current
     if (!video) return
 
     video.muted = !video.muted
     setIsMuted(video.muted)
-    setHasInteracted(true)
   }
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const video = videoRef.current
-    if (!video) return
-
-    const percentage = parseFloat(e.target.value)
-    const time = (percentage / 100) * video.duration
-    video.currentTime = time
-    setCurrentTime(time)
-  }
-
-  const toggleFullscreen = () => {
-    const container = containerRef.current
-    if (!container) return
-
-    if (!isFullscreen) {
-      if (container.requestFullscreen) {
-        container.requestFullscreen()
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      }
-    }
-  }
-
-  const restart = () => {
-    const video = videoRef.current
-    if (!video) return
-
-    video.currentTime = 0
-    setCurrentTime(0)
-    video.play()
-    setIsPlaying(true)
-  }
-
-  // Detectar mudanças no fullscreen
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement)
-    }
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
-  }, [])
 
   return (
-    <section className="py-16 bg-muted/30">
-      <div className="container">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Conheça a Mensagem</h2>
-            <p className="text-lg text-muted-foreground">
-              Assista ao vídeo e descubra como este livro pode transformar vidas
-            </p>
+    <section className="py-24 bg-slate-50 relative overflow-hidden">
+       {/* Decorative Background Elements */}
+       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[100px] opacity-60 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-100/60 rounded-full blur-[80px] opacity-50 -translate-x-1/3" />
+       </div>
+
+      <div className="container relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          
+          {/* Text Content */}
+          <div className="order-2 lg:order-1 space-y-8">
+            <div className="space-y-6">
+               <div className="inline-flex items-center rounded-full border border-blue-200 bg-white px-3 py-1 text-sm font-medium text-blue-600 shadow-sm">
+                <Sparkles className="mr-2 h-3 w-3 fill-blue-400 text-blue-400" />
+                Assista ao Trailer
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+                Uma mensagem de <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Esperança Real</span>
+              </h2>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Veja como a metodologia do livro "A Cura das Drogas" tem impactado vidas. Não é apenas teoria, é vivência transformadora documentada.
+              </p>
+            </div>
+
+            <div className="space-y-4 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+              {[
+                "O poder da decisão pessoal na recuperação",
+                "Como a fé atua como catalisador de mudança",
+                "Histórias reais de superação e liberdade",
+                "Um guia prático para familiares e amigos"
+              ].map((item, index) => (
+                <div key={index} className="flex items-start gap-4 group">
+                  <div className="mt-0.5 rounded-full bg-blue-50 p-1 group-hover:bg-blue-100 transition-colors">
+                    <CheckCircle2 className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <span className="text-slate-700 font-medium">{item}</span>
+                </div>
+              ))}
+            </div>
+            
+            <div className="pt-2 border-l-4 border-blue-200 pl-6">
+               <p className="text-base text-slate-500 italic">
+                 "Conhecereis a verdade, e a verdade vos libertará." <br/>
+                 <span className="text-sm font-semibold not-italic text-slate-900">— João 8:32</span>
+               </p>
+            </div>
           </div>
 
-          <div className="flex justify-center">
-            <div 
-              ref={containerRef}
-              className="aspect-[9/16] bg-black relative group cursor-pointer w-[280px] md:w-[320px] lg:w-[350px] rounded-2xl overflow-hidden"
-              onClick={togglePlay}
-            >
-              {/* Vídeo */}
-              <video
-                ref={videoRef}
-                className="w-full h-full object-cover bg-black"
-                preload="metadata"
-                onError={() => {
-                  // Fallback quando vídeo não carrega
-                  console.log('Vídeo não encontrado, mostrando placeholder')
-                }}
-              >
-                <source src="/videos/apresentacao.mp4" type="video/mp4" />
-                <source src="/videos/apresentacao.webm" type="video/webm" />
-                <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
-                  <div className="text-center">
-                    <p className="text-lg mb-2">Vídeo de apresentação</p>
-                    <p className="text-sm text-gray-400">Adicione o arquivo apresentacao.mp4 na pasta public/videos/</p>
-                  </div>
-                </div>
-              </video>
-
-              {/* Overlay de play central */}
-              {!isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                  <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-2xl">
-                    <Play className="w-8 h-8 text-black ml-1" />
-                  </div>
-                </div>
-              )}
-
-              {/* Controles */}
+          {/* Video Player Column */}
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+            <div className="relative group">
+              {/* Decorative Glow & Blobs behind phone */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              
+              {/* Phone Frame Container */}
               <div 
-                className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity duration-300 ${
-                  showControls ? 'opacity-100' : 'opacity-0'
-                }`}
+                ref={containerRef}
+                className="relative z-10 w-[280px] sm:w-[320px] aspect-[9/16] bg-slate-950 rounded-[2.5rem] shadow-2xl overflow-hidden border-[8px] border-slate-900 ring-1 ring-white/10 cursor-pointer transform transition-all duration-500 hover:scale-[1.02] hover:shadow-blue-900/20"
+                onClick={togglePlay}
               >
-                                 {/* Barra de progresso */}
-                 <div className="mb-3">
-                   <input
-                     type="range"
-                     min="0"
-                     max="100"
-                     value={videoRef.current?.duration ? (currentTime / videoRef.current.duration) * 100 : 0}
-                     onChange={handleSeek}
-                     className="w-full h-1 bg-white/30 rounded-full appearance-none cursor-pointer slider"
-                     style={{
-                       background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${videoRef.current?.duration ? (currentTime / videoRef.current.duration) * 100 : 0}%, rgba(255,255,255,0.3) ${videoRef.current?.duration ? (currentTime / videoRef.current.duration) * 100 : 0}%, rgba(255,255,255,0.3) 100%)`
-                     }}
-                   />
-                 </div>
+                {/* Screen Reflection Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-20 rounded-[2rem]" />
 
-                {/* Controles inferiores */}
-                <div className="flex items-center justify-between text-white">
-                  <div className="flex items-center space-x-3">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        togglePlay()
-                      }}
-                      className="text-white hover:bg-white/20 p-2"
-                    >
-                      {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-                    </Button>
-
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggleMute()
-                      }}
-                      className="text-white hover:bg-white/20 p-2"
-                    >
-                      {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-                    </Button>
-
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        restart()
-                      }}
-                      className="text-white hover:bg-white/20 p-2"
-                    >
-                      <RotateCcw className="w-5 h-5" />
-                    </Button>
-
-                                         <span className="text-sm font-mono">
-                       {formatTime(currentTime)} / {formatTime(videoRef.current?.duration || 0)}
-                     </span>
+                <video
+                  ref={videoRef}
+                  className="w-full h-full object-cover"
+                  poster="/images/video-poster.jpg"
+                  playsInline
+                  loop
+                  muted={false} 
+                >
+                  <source src="/videos/apresentacao.mp4" type="video/mp4" />
+                  <div className="w-full h-full flex items-center justify-center bg-slate-900 text-white p-4 text-center">
+                    Vídeo indisponível
                   </div>
+                </video>
 
+                {/* Play Overlay */}
+                <div className={cn(
+                  "absolute inset-0 bg-black/30 flex items-center justify-center transition-all duration-500 backdrop-blur-[2px]",
+                  isPlaying ? "opacity-0 pointer-events-none backdrop-blur-0" : "opacity-100"
+                )}>
+                  <div className="relative group/btn">
+                    <div className="absolute inset-0 bg-white/30 rounded-full animate-ping opacity-75 duration-1000" />
+                    <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md transform transition-all group-hover/btn:scale-110 group-hover/btn:bg-white">
+                      <Play className="w-8 h-8 text-blue-600 ml-1 fill-current" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Minimalist Controls */}
+                <div className={cn(
+                  "absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-opacity duration-300 flex justify-between items-end z-30",
+                  !isPlaying && !hasInteracted ? "opacity-0" : "opacity-100"
+                )}>
+                  <div className="text-white">
+                    <p className="text-xs font-medium text-blue-200 mb-0.5">Trailer Oficial</p>
+                    <p className="text-sm font-bold">A Cura das Drogas</p>
+                  </div>
                   <Button
-                    size="sm"
+                    size="icon"
                     variant="ghost"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleFullscreen()
-                    }}
-                    className="text-white hover:bg-white/20 p-2"
+                    className="text-white hover:bg-white/20 rounded-full h-10 w-10"
+                    onClick={toggleMute}
                   >
-                    <Maximize2 className="w-5 h-5" />
+                    {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                   </Button>
                 </div>
               </div>
-
-              {/* Indicador de carregamento */}
-              {!hasInteracted && (
-                <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                  Clique para ativar o som
-                </div>
-              )}
-                          </div>
             </div>
+          </div>
+
         </div>
       </div>
-
-      <style jsx>{`
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          height: 12px;
-          width: 12px;
-          border-radius: 50%;
-          background: #3b82f6;
-          cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .slider::-moz-range-thumb {
-          height: 12px;
-          width: 12px;
-          border-radius: 50%;
-          background: #3b82f6;
-          cursor: pointer;
-          border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-      `}</style>
     </section>
   )
 }

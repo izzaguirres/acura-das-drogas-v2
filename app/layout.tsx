@@ -1,38 +1,48 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/toaster"
 
-const inter = Inter({ subsets: ["latin"] })
+const fontSans = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://acuradasdrogas.com'),
   title: {
-    default: "A Cura das Drogas - Livro de Transformação e Liberdade | Evangelização em Presídios",
+    default: "A Cura das Drogas | Projeto de Evangelização e Reabilitação",
     template: "%s | A Cura das Drogas",
   },
   description:
-    "Livro 'A Cura das Drogas' - Transformação espiritual e liberdade das drogas. Evangelização em presídios, distribuição gratuita, mensagem de esperança para pessoas encarceradas. Projeto social cristão.",
+    "Projeto A Cura das Drogas: Levando esperança, fé e reabilitação para presídios. Conheça o livro que tem transformado vidas e famílias através da mensagem de Cristo.",
   keywords: [
-    "cura das drogas",
-    "livro cura das drogas", 
-    "transformação espiritual",
-    "liberdade das drogas",
-    "evangelização presídios",
-    "pessoas encarceradas",
-    "projeto social cristão",
-    "superação vícios",
-    "fé e transformação",
-    "distribuição gratuita livros",
-    "mensagem esperança",
-    "reabilitação espiritual"
+    "A Cura das Drogas",
+    "Reabilitação de drogados", 
+    "Evangelização em presídios",
+    "Livro cristão sobre drogas",
+    "Ajuda para dependentes químicos",
+    "Projeto social cristão",
+    "Recuperação de viciados",
+    "Testemunho ex-presidiário",
+    "Como vencer as drogas",
+    "Família de dependentes",
+    "Capelania prisional"
   ],
-  authors: [{ name: "A Cura das Drogas", url: "https://acuradasdrogas.com" }],
+  authors: [{ name: "Pr. Isac Gilberto Ricardo", url: "https://acuradasdrogas.com" }],
   creator: "A Cura das Drogas",
   publisher: "A Cura das Drogas",
   category: "Religião e Espiritualidade",
-  classification: "Projeto Social Cristão",
+  classification: "Projeto Social / ONG",
+  applicationName: "A Cura das Drogas",
+  referrer: "origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -42,73 +52,39 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     url: "https://acuradasdrogas.com",
-    title: "A Cura das Drogas - Livro de Transformação e Liberdade",
-    description: "Livro 'A Cura das Drogas' - Transformação espiritual e liberdade das drogas. Evangelização em presídios, distribuição gratuita.",
+    title: "A Cura das Drogas | Transformando Vidas Além das Grades",
+    description: "Descubra como o projeto A Cura das Drogas está levando a mensagem de liberdade e fé para dentro dos presídios. Junte-se a essa missão.",
     siteName: "A Cura das Drogas",
     images: [
       {
         url: "/images/header.png",
         width: 1200,
         height: 630,
-        alt: "Livro A Cura das Drogas - Transformação e Liberdade",
+        alt: "Capa do Livro A Cura das Drogas e Projeto Social",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "A Cura das Drogas - Livro de Transformação e Liberdade",
-    description: "Livro 'A Cura das Drogas' - Transformação espiritual e liberdade das drogas. Evangelização em presídios.",
+    title: "A Cura das Drogas | Projeto de Vida",
+    description: "Projeto social de evangelização carcerária e combate às drogas através da fé.",
     images: ["/images/header.png"],
     creator: "@acuradasdrogas",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
-  generator: 'v0.dev'
-}
-
-// Dados estruturados para SEO e IAs
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "A Cura das Drogas",
-  "url": "https://acuradasdrogas.com",
-  "logo": "https://acuradasdrogas.com/images/logo.png",
-  "description": "Projeto social cristão de evangelização em presídios através do livro 'A Cura das Drogas'",
-  "foundingDate": "2024",
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer service",
-    "email": "colaboracao@acuradasdrogas.com.br",
-    "availableLanguage": "Portuguese"
+  alternates: {
+    canonical: './',
   },
-  "sameAs": [
-    "https://www.instagram.com/acuradasdrogas"
-  ],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Livro A Cura das Drogas",
-    "itemListElement": [
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Book",
-          "name": "A Cura das Drogas",
-          "description": "Livro sobre transformação espiritual e liberdade das drogas",
-          "author": {
-            "@type": "Person",
-            "name": "Autor do Projeto"
-          },
-          "genre": "Religião e Espiritualidade",
-          "inLanguage": "pt-BR"
-        },
-        "price": "0",
-        "priceCurrency": "BRL",
-        "availability": "https://schema.org/InStock"
-      }
-    ]
-  }
 }
 
 export default function RootLayout({
@@ -117,14 +93,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      </head>
-      <body className={cn(inter.className, "min-h-screen bg-background antialiased")}>{children}</body>
+    <html lang="pt-BR" className="scroll-smooth">
+      <body className={cn(fontSans.className, "min-h-screen bg-background antialiased selection:bg-primary/20 selection:text-primary")}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }

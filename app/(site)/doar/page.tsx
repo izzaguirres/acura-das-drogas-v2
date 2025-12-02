@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Printer, BookOpen, Truck, Users, Sparkles, Copy, Building2 } from "lucide-react"
+import { MessageCircle, Printer, BookOpen, Truck, Users, Sparkles, Copy, Building2, Heart } from "lucide-react"
 import { DonationMethods } from "@/components/donation-methods"
 import { printCosts, contacts } from "@/content/data"
 

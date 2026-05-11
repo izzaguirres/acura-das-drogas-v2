@@ -1,14 +1,11 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Plus_Jakarta_Sans } from "next/font/google"
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
-
-const fontSans = Plus_Jakarta_Sans({ 
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+import { Analytics } from "@/components/analytics"
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://acuradasdrogas.com'),
@@ -31,7 +28,7 @@ export const metadata: Metadata = {
     "Família de dependentes",
     "Capelania prisional"
   ],
-  authors: [{ name: "Pr. Isac Gilberto Ricardo", url: "https://acuradasdrogas.com" }],
+  authors: [{ name: "Isaac Amar", url: "https://acuradasdrogas.com" }],
   creator: "A Cura das Drogas",
   publisher: "A Cura das Drogas",
   category: "Religião e Espiritualidade",
@@ -93,10 +90,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className="scroll-smooth">
-      <body className={cn(fontSans.className, "min-h-screen bg-background antialiased selection:bg-primary/20 selection:text-primary")}>
+    <html lang="pt-BR" className={cn("scroll-smooth", GeistSans.variable, GeistMono.variable)}>
+      <body className={cn(GeistSans.className, "min-h-screen bg-background antialiased selection:bg-primary/20 selection:text-primary")}>
         {children}
         <Toaster />
+        <Analytics />
       </body>
     </html>
   )

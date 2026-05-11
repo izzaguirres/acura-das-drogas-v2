@@ -4,74 +4,92 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Pure White */
-    --foreground: 222 47% 11%; /* Deep Navy (Slate 900) for text readability */
+    /* === Coastal Dawn — A Cura das Drogas DS v0.1 === */
+
+    /* Surfaces */
+    --background: 210 27% 99%;          /* Sea Mist #FAFBFC */
+    --foreground: 215 65% 17%;          /* Ocean Deep #0F2748 */
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 215 65% 17%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 215 65% 17%;
 
-    /* Primary: Vibrant Sky Blue (Book Cover Match) */
-    /* HSL: 204, 100%, 50% - Bright and Hopeful */
-    --primary: 204 94% 48%; 
-    --primary-foreground: 0 0% 100%; /* White text on blue buttons */
+    /* Sky tints (replacing slate-50 vibe) */
+    --sky-50: 210 71% 96%;              /* #F0F6FC */
+    --sky-100: 213 47% 92%;             /* #DEEAF6 */
+    --tide: 207 51% 75%;                /* #9DC4E2 */
 
-    /* Secondary: Very Light Blue/Alice Blue (Background accents) */
-    --secondary: 204 94% 97%; 
-    --secondary-foreground: 204 94% 30%; /* Darker blue for text on light bg */
+    /* Brand · Cure Blue */
+    --primary: 205 73% 43%;             /* Cure 600 #1E7FBF */
+    --primary-foreground: 0 0% 100%;
+    --primary-50: 205 56% 94%;          /* Cure 50 #E6F1F9 */
+    --primary-400: 205 60% 56%;         /* Cure 400 #4A9FD4 */
+    --primary-800: 205 73% 31%;         /* Cure 800 #155A89 */
 
-    /* Muted: Cool Gray */
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Secondary (sky soft) */
+    --secondary: 210 71% 96%;
+    --secondary-foreground: 205 73% 31%;
 
-    /* Accent: Slightly deeper blue for hover states/borders */
-    --accent: 204 94% 48%;
-    --accent-foreground: 0 0% 100%;
+    /* Slate tones */
+    --muted: 213 47% 92%;
+    --muted-foreground: 215 22% 47%;    /* Slate 600 #5C7390 */
 
+    --accent: 210 71% 96%;
+    --accent-foreground: 205 73% 31%;
+
+    /* Consejero — single warm note (orange from book badge) */
+    --consejero: 12 70% 51%;            /* #D94A2A */
+    --consejero-foreground: 0 0% 100%;
+    --consejero-soft: 22 100% 97%;      /* #FFF8F4 — bg de cards "preciso ajuda" */
+    --consejero-border: 14 86% 89%;     /* #FAD6C8 */
+    --consejero-deep: 12 73% 35%;       /* #9A3618 — texto on consejero-soft */
+
+    /* Destructive (system) */
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 210 40% 90%; /* Light cool gray */
-    --input: 210 40% 90%;
-    --ring: 204 94% 48%; /* Focus ring matches primary */
+    /* Borders */
+    --border: 214 32% 91%;              /* Hairline #E2E8F0 */
+    --input: 214 32% 91%;
+    --ring: 205 73% 43%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;                  /* 20px — cards default */
 
+    /* Legacy (manter pra não quebrar refs antigas) */
     --whatsapp: 142 70% 49%;
     --donation: 142 70% 49%;
   }
 
   .dark {
-    /* Dark Mode Strategy: Deep Navy Backgrounds, Bright Blue Accents */
-    --background: 222 47% 11%; /* Slate 900 */
-    --foreground: 210 40% 98%;
+    --background: 215 65% 11%;          /* Ocean Deep deeper */
+    --foreground: 210 71% 96%;
 
-    --card: 217 33% 17%; /* Slate 800 */
-    --card-foreground: 210 40% 98%;
+    --card: 215 50% 15%;
+    --card-foreground: 210 71% 96%;
 
-    --popover: 217 33% 17%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 215 50% 15%;
+    --popover-foreground: 210 71% 96%;
 
-    --primary: 204 94% 48%; /* Keep the brand blue */
-    --primary-foreground: 0 0% 100%;
+    --primary: 205 60% 56%;
+    --primary-foreground: 215 65% 11%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 215 50% 18%;
+    --secondary-foreground: 210 71% 96%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 215 50% 18%;
+    --muted-foreground: 213 25% 70%;
 
-    --accent: 217 33% 17%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 215 50% 18%;
+    --accent-foreground: 210 71% 96%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 204 94% 48%;
+    --border: 215 50% 22%;
+    --input: 215 50% 22%;
+    --ring: 205 60% 56%;
   }
 }
 
@@ -79,29 +97,78 @@
   * {
     @apply border-border;
   }
+  html {
+    /* Geist tokens (variables set on <html> via next/font) */
+    font-feature-settings: "ss01", "cv11";
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tipografia base — Geist + tracking apertado */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
-  .wave-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e0f2fe' fill-opacity='0.3'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  /* Type scale utilities — mobile-first padronizado */
+  .type-display {
+    font-size: clamp(38px, 8vw, 96px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+  .type-h1 {
+    font-size: clamp(32px, 5.5vw, 72px);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+  .type-h2 {
+    font-size: clamp(26px, 4.5vw, 56px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+  .type-h3 {
+    font-size: clamp(20px, 2.6vw, 32px);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+  .type-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Shadow tokens */
+  .shadow-subtle {
+    box-shadow: 0 1px 2px rgba(15, 39, 72, 0.06);
+  }
+  .shadow-lifted {
+    box-shadow: 0 8px 24px rgba(15, 39, 72, 0.08);
+  }
+  .shadow-dramatic {
+    box-shadow: 0 24px 60px rgba(15, 39, 72, 0.12);
+  }
+  .shadow-brand {
+    box-shadow: 0 12px 32px rgba(30, 127, 191, 0.32);
+  }
+  .shadow-consejero {
+    box-shadow: 0 12px 32px rgba(217, 74, 42, 0.28);
   }
 }
 
 @keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
-
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }

@@ -14,11 +14,11 @@ const config = {
     container: {
       center: true,
       padding: {
-        DEFAULT: "1rem",
+        DEFAULT: "1.25rem",
         sm: "2rem",
-        lg: "4rem",
-        xl: "5rem",
-        "2xl": "6rem",
+        lg: "3rem",
+        xl: "4rem",
+        "2xl": "5rem",
       },
       screens: {
         sm: "640px",
@@ -29,6 +29,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -38,6 +42,9 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          50: "hsl(var(--primary-50))",
+          400: "hsl(var(--primary-400))",
+          800: "hsl(var(--primary-800))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -63,13 +70,29 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Coastal Dawn semantic tokens
+        sky: {
+          50: "hsl(var(--sky-50))",
+          100: "hsl(var(--sky-100))",
+        },
+        ocean: "hsl(215 65% 17%)",
+        tide: "hsl(var(--tide))",
+        consejero: {
+          DEFAULT: "hsl(var(--consejero))",
+          foreground: "hsl(var(--consejero-foreground))",
+          soft: "hsl(var(--consejero-soft))",
+          border: "hsl(var(--consejero-border))",
+          deep: "hsl(var(--consejero-deep))",
+        },
         whatsapp: "hsl(var(--whatsapp))",
         donation: "hsl(var(--donation))",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--radius)",                  // 20px
+        md: "calc(var(--radius) - 8px)",      // 12px
+        sm: "calc(var(--radius) - 14px)",     // 6px
+        xl: "calc(var(--radius) + 8px)",      // 28px
+        "2xl": "calc(var(--radius) + 12px)",  // 32px
       },
       keyframes: {
         "accordion-down": {
@@ -82,13 +105,18 @@ const config = {
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-20px)" },
+          "50%": { transform: "translateY(-12px)" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         float: "float 6s ease-in-out infinite",
+        "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
       },
     },
   },

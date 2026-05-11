@@ -1,76 +1,68 @@
-import { Card } from "@/components/ui/card"
-import { Heart, Shield, Sun, Compass, BookOpen, Sparkles, Anchor, Lightbulb } from "lucide-react"
+import { Reveal } from "@/components/reveal"
 
 export function BookHighlights() {
-  const features = [
+  const pillars = [
     {
-      icon: <Shield className="w-6 h-6 text-blue-600" />,
-      bg: "bg-blue-100",
-      title: "Defesa Contra o Vício",
-      description: "Estratégias espirituais e práticas para blindar a mente e o coração contra recaídas."
+      num: "01",
+      title: "Você não é o que disseram que você é.",
+      body:
+        "A medicina rotulou o vício como doença sem cura. A culpa virou cárcere. Esse livro existe pra quebrar esse rótulo — antes de qualquer outra coisa.",
     },
     {
-      icon: <Compass className="w-6 h-6 text-indigo-600" />,
-      bg: "bg-indigo-100",
-      title: "Um Novo Caminho",
-      description: "Não é apenas sobre parar, é sobre encontrar uma nova direção de vida com propósito."
+      num: "02",
+      title: "Anos de tratamento. Mais recaídas.",
+      body:
+        "Já tentou clínica, AA, igreja, conselho de família. Talvez tudo. Esse livro propõe o que esses caminhos quase nunca tocam: a raiz espiritual do vazio.",
     },
     {
-      icon: <Heart className="w-6 h-6 text-rose-600" />,
-      bg: "bg-rose-100",
-      title: "Cura Interior",
-      description: "Abordagem profunda que trata as feridas emocionais que muitas vezes levam ao uso de drogas."
+      num: "03",
+      title: "Sete etapas. Sem recaídas. Sem remédios.",
+      body:
+        "Não é teoria de gabinete nem retórica religiosa. É um manual de cabeceira escrito por quem viveu 30 anos no campo — e viu acontecer.",
     },
-    {
-      icon: <Sun className="w-6 h-6 text-amber-600" />,
-      bg: "bg-amber-100",
-      title: "Renovação da Esperança",
-      description: "Testemunhos e princípios que devolvem a luz para quem está na escuridão do cárcere."
-    }
   ]
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
-       {/* Background decorations */}
-       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-20 left-10 w-64 h-64 bg-slate-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
-            <div className="absolute bottom-20 right-10 w-64 h-64 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
-       </div>
+    <section className="py-16 md:py-24 lg:py-32 bg-background">
+      <div className="container">
+        <div className="flex flex-col gap-10 md:gap-12 lg:gap-20">
+          {/* Header centralizado */}
+          <Reveal className="flex flex-col items-center text-center gap-5 max-w-[820px] mx-auto">
+            <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 bg-background border border-border">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="text-[11px] font-medium text-muted-foreground tracking-[0.14em] uppercase">
+                Por que esse livro existe
+              </span>
+            </span>
 
-      <div className="container relative z-10">
-        <div className="text-center mb-20 space-y-4">
-          <div className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-600 shadow-sm">
-            <Sparkles className="mr-2 h-3 w-3 fill-yellow-400 text-yellow-400" />
-            Conteúdo Transformador
+            <h2 className="type-h2 text-foreground">
+              Vício não é doença incurável.{" "}
+              <br className="hidden md:block" />
+              <span className="text-primary">É desordem espiritual curável.</span>
+            </h2>
+          </Reveal>
+
+          {/* 3 pillars como cards numerados, full container width */}
+          <div className="flex md:grid md:grid-cols-3 gap-5 lg:gap-6 overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory md:snap-none scroll-pl-5 md:scroll-pl-0 touch-pan-x md:touch-auto -mx-5 md:mx-0 px-5 md:px-0 pb-2 md:pb-0 [&::-webkit-scrollbar]:hidden" style={{ overscrollBehaviorX: "contain" }}>
+            {pillars.map((p) => (
+              <article
+                key={p.num}
+                className="shrink-0 md:shrink-0 w-[85%] sm:w-[55%] md:w-auto snap-start group h-full flex flex-col gap-7 p-8 lg:p-10 rounded-[28px] bg-card border border-border transition-all duration-500 hover:border-primary/30 hover:shadow-lifted"
+              >
+                  <span className="text-[40px] lg:text-[48px] font-light text-primary leading-none tracking-[-0.04em]">
+                    {p.num}
+                  </span>
+                  <div className="flex flex-col gap-3 mt-auto">
+                    <h3 className="text-[20px] lg:text-[22px] font-medium text-foreground tracking-tight leading-[1.3]">
+                      {p.title}
+                    </h3>
+                    <p className="text-[15px] text-muted-foreground leading-relaxed">
+                      {p.body}
+                    </p>
+                  </div>
+              </article>
+            ))}
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight">
-            Muito mais que um livro,<br />um guia de <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">libertação</span>
-          </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
-            Cada capítulo foi desenhado com cuidado para tocar a alma e oferecer ferramentas práticas de mudança definitiva.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <Card key={index} className="group p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-900/5 hover:border-blue-100 transition-all duration-500 bg-white hover:-translate-y-1 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-slate-50 to-transparent rounded-bl-[50%] -mr-8 -mt-8 transition-all group-hover:scale-150 group-hover:from-blue-50" />
-              
-              <div className="flex flex-col sm:flex-row gap-6 items-start relative z-10">
-                <div className={`flex-shrink-0 w-16 h-16 rounded-2xl ${feature.bg} flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-inner`}>
-                  {feature.icon}
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-500 leading-relaxed group-hover:text-slate-600">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ))}
         </div>
       </div>
     </section>

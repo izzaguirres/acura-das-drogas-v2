@@ -1,114 +1,115 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, HeartHandshake, PlayCircle } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import Image from "next/image"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowRight01Icon, WhatsappIcon } from "@hugeicons/core-free-icons"
+import { WaLink } from "@/components/wa-link"
 
 export function HeroBook() {
   return (
-    <section className="relative pt-20 pb-24 lg:pt-32 lg:pb-40 overflow-hidden bg-white">
-      {/* Ambient Background Elements */}
-      <div className="absolute top-0 right-0 -z-10 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-[100px] opacity-60 translate-x-1/3 -translate-y-1/4" />
-      <div className="absolute bottom-0 left-0 -z-10 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[80px] opacity-50 -translate-x-1/4 translate-y-1/4" />
-      <div className="absolute top-20 left-20 w-4 h-4 bg-blue-400 rounded-full animate-pulse" />
-      <div className="absolute bottom-40 right-20 w-3 h-3 bg-indigo-400 rounded-full animate-pulse delay-700" />
+    <section className="relative w-full overflow-hidden -mt-[76px] lg:-mt-[88px]">
+      {/* Photo */}
+      <Image
+        src="/images/people/hero.webp"
+        alt="A Cura das Drogas — transformação"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-[70%_center] md:object-center -z-20"
+      />
+      {/* Dark gradient overlay — vertical em mobile, horizontal em desktop */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 md:hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(15, 39, 72, 0.35) 0%, rgba(15, 39, 72, 0.7) 60%, rgba(15, 39, 72, 0.92) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 hidden md:block"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(15, 39, 72, 0.78) 0%, rgba(15, 39, 72, 0.5) 35%, rgba(15, 39, 72, 0.15) 60%, rgba(15, 39, 72, 0) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute left-0 right-0 bottom-0 h-72 -z-10"
+        style={{
+          background: "linear-gradient(180deg, rgba(15, 39, 72, 0) 0%, rgba(15, 39, 72, 0.55) 100%)",
+        }}
+      />
 
-      <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-8 items-center">
-          
-          {/* Left Column: Content */}
-          <div className="space-y-8 max-w-2xl text-center lg:text-left mx-auto lg:mx-0">
-            <div className="space-y-6">
-              <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-600 shadow-sm mx-auto lg:mx-0">
-                <span className="relative flex h-2 w-2 mr-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                Projeto Social & Evangelístico
-              </div>
-              
-              <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl leading-[1.1]">
-                A Cura das <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Drogas</span>
-              </h1>
-              
-              <p className="text-lg text-slate-600 sm:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0">
-                Transforme vidas através da fé. Uma jornada de liberdade, esperança e renovação espiritual para quem mais precisa.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="h-14 px-8 text-base font-semibold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5" asChild>
-                <a 
-                  href="https://wa.me/+34673017500?text=Ol%C3%A1,%20vim%20do%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20o%20livro%20A%20Cura%20das%20Drogas!" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  Comprar Livro
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </a>
-              </Button>
-              
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="h-14 px-8 text-base font-semibold border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-              >
-                <Link href="/doar">
-                  <HeartHandshake className="mr-2 h-5 w-5 text-rose-500" />
-                  Fazer Doação
-                </Link>
-              </Button>
-            </div>
-            
-            <div className="pt-6 flex items-center gap-4 text-sm text-slate-500 justify-center lg:justify-start border-t border-slate-100 lg:border-none mt-4 lg:mt-0">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-10 h-10 rounded-full bg-white border-2 border-white flex items-center justify-center overflow-hidden shadow-sm">
-                     <Image src={`/images/people/${i}.jpg`} alt="User" width={40} height={40} className="object-cover" />
-                  </div>
-                ))}
-              </div>
-              <div className="text-left">
-                <p className="font-bold text-slate-900">500+ Vidas</p>
-                <p className="text-xs">Impactadas pelo projeto</p>
-              </div>
-            </div>
+      <div className="relative container min-h-[640px] md:min-h-[720px] lg:min-h-[820px] flex flex-col justify-end pb-12 md:pb-16 lg:pb-24 pt-32 md:pt-40 lg:pt-52">
+        <div className="max-w-[640px] flex flex-col gap-5 md:gap-7 lg:gap-9 animate-fade-up">
+          <div className="inline-flex self-start items-center gap-2 rounded-full px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+            <span className="text-[11px] font-medium text-white tracking-[0.14em] uppercase">
+              Desde 1994
+            </span>
           </div>
 
-          {/* Right Column: Hero Image */}
-          <div className="relative flex justify-center lg:justify-end mt-8 lg:mt-0">
-            {/* Decorative Circle behind book */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100/50 to-transparent rounded-full blur-3xl -z-10" />
-            
-            <div className="relative w-full max-w-[450px] lg:max-w-[500px] aspect-[4/5] animate-float">
-               {/* Book Shadow */}
-               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-blue-900/20 blur-2xl rounded-[100%]" />
-               
-               <Image
-                src="/images/bookhand.png"
-                alt="Livro A Cura das Drogas em destaque"
-                fill
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
-              
-              {/* Floating Badge */}
-              <div className="absolute -right-4 top-20 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-white/50 animate-pulse delay-1000 hidden md:block">
-                  <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                          <PlayCircle className="w-6 h-6 text-green-600" />
-                      </div>
-                      <div>
-                          <p className="text-xs text-slate-500 font-semibold uppercase">Assista</p>
-                          <p className="text-sm font-bold text-slate-900">O Trailer</p>
-                      </div>
-                  </div>
-              </div>
+          <h1 className="type-display text-white">
+            A cura existe
+            <br />
+            e é <span className="font-light text-sky-100">para todos.</span>
+          </h1>
+
+          <p className="text-base md:text-lg lg:text-xl text-white/90 leading-relaxed max-w-[560px]">
+            Para quem está perdido no vício. E para quem ama alguém preso por
+            ele. Há 30 anos, Isaac Amar alcança vidas onde a clínica não chega
+            — atrás das grades e dentro de casa.
+          </p>
+
+          <div className="flex flex-wrap gap-3 pt-1">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full h-14 px-7 bg-consejero hover:bg-consejero/90 text-consejero-foreground shadow-consejero font-medium gap-2.5 transition-all hover:-translate-y-0.5"
+            >
+              <WaLink
+                href="https://wa.me/+34673017500?text=Ol%C3%A1,%20preciso%20de%20ajuda%20com%20uso%20de%20drogas."
+                source="hero"
+                intent="ajuda"
+              >
+                <HugeiconsIcon icon={WhatsappIcon} size={18} strokeWidth={2} />
+                Preciso de ajuda
+              </WaLink>
+            </Button>
+
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="rounded-full h-14 px-7 bg-white hover:bg-white/95 text-ocean shadow-lifted font-medium gap-2.5 transition-all hover:-translate-y-0.5"
+            >
+              <Link href="/o-projeto">
+                Quero ajudar
+                <HugeiconsIcon icon={ArrowRight01Icon} size={18} strokeWidth={2} />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-4 md:gap-6 pt-5 md:pt-6 border-t border-white/15 mt-2">
+            <div className="flex flex-col gap-0.5">
+              <div className="text-xl md:text-2xl font-medium text-white tracking-tight">500+</div>
+              <div className="text-[11px] md:text-xs text-white/70">Vidas impactadas</div>
+            </div>
+            <div className="w-px h-9 md:h-10 bg-white/15" />
+            <div className="flex flex-col gap-0.5">
+              <div className="text-xl md:text-2xl font-medium text-white tracking-tight">2 países</div>
+              <div className="text-[11px] md:text-xs text-white/70">Brasil + Espanha</div>
+            </div>
+            <div className="w-px h-9 md:h-10 bg-white/15" />
+            <div className="flex flex-col gap-0.5">
+              <div className="text-xl md:text-2xl font-medium text-white tracking-tight">100%</div>
+              <div className="text-[11px] md:text-xs text-white/70">Gratuita</div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }

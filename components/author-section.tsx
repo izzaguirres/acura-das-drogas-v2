@@ -1,64 +1,121 @@
-import { Card } from "@/components/ui/card"
 import Image from "next/image"
-import { Quote } from "lucide-react"
+import { Reveal } from "@/components/reveal"
 
 export function AuthorSection() {
   return (
-    <section className="py-24 bg-white border-t border-slate-100">
-      <div className="container">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Image Column */}
-            <div className="lg:col-span-5 order-2 lg:order-1 relative">
-              <div className="relative aspect-[4/5] w-full max-w-[320px] mx-auto lg:mx-0">
-                {/* Decorative elements */}
-                <div className="absolute top-0 -left-4 w-24 h-24 bg-primary/10 rounded-tl-[3rem] -z-10" />
-                <div className="absolute bottom-0 -right-4 w-32 h-32 bg-slate-100 rounded-br-[3rem] -z-10" />
-                
-                <Image
-                  src="/images/autor.png"
-                  alt="Foto do autor"
-                  fill
-                  className="object-cover rounded-2xl shadow-xl grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </div>
-            </div>
-
-            {/* Content Column */}
-            <div className="lg:col-span-7 order-1 lg:order-2 space-y-8 text-center lg:text-left">
-              <div className="space-y-2">
-                <span className="text-primary font-semibold tracking-wider uppercase text-sm">Sobre o Autor</span>
-                <h2 className="text-4xl font-bold text-slate-900 font-display">
-                  Uma vida dedicada à <br className="hidden lg:block" />transformação de vidas
-                </h2>
-              </div>
-
-              <div className="relative">
-                <Quote className="absolute -top-4 -left-6 w-8 h-8 text-primary/20 rotate-180" />
-                <p className="text-lg text-slate-600 leading-relaxed italic">
-                  "Acredito que não existe poço tão fundo onde a graça de Deus não possa alcançar. Minha missão não é apenas entregar um livro, mas entregar uma ferramenta que pode serrar as grades da alma."
-                </p>
-              </div>
-
-              <div className="space-y-4 text-slate-600 leading-relaxed">
-                <p>
-                  Movido por um chamado divino inegociável, dediquei os últimos anos a entender a dor daqueles que muitos preferem ignorar. O sistema prisional está cheio de histórias interrompidas, mas também de futuros potenciais.
-                </p>
-                <p>
-                  "A Cura das Drogas" nasce não de teorias de gabinete, mas de joelhos no chão e olhos nos olhos. É um convite para que cada leitor, seja dentro de uma cela ou no conforto de casa, encontre a verdadeira liberdade que só existe através da fé e da decisão pessoal.
-                </p>
-              </div>
-
-              <div className="pt-4">
-                <p className="font-bold text-slate-900 text-lg">Isac Gilberto Ricardo</p>
-                <p className="text-slate-500 text-sm">Autor & Fundador do Projeto</p>
-              </div>
-            </div>
-
-          </div>
+    <>
+      {/* === MOBILE === foto limpa em cima + content em fundo dark embaixo */}
+      <section className="md:hidden flex flex-col bg-ocean text-white">
+        {/* Foto com gradient fade pra ocean no rodapé — sem quebra visual */}
+        <div className="relative w-full aspect-[3/4]">
+          <Image
+            src="/images/people/isaac.webp"
+            alt="Isaac Amar"
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+            priority={false}
+          />
+          <div
+            aria-hidden
+            className="absolute left-0 right-0 bottom-0 h-[55%] pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15, 39, 72, 0) 0%, rgba(15, 39, 72, 0.45) 45%, rgba(15, 39, 72, 0.9) 80%, hsl(215 65% 17%) 100%)",
+            }}
+          />
         </div>
-      </div>
-    </section>
+
+        {/* Content em fundo dark navy — continua direto sem quebra */}
+        <div className="relative px-5 pt-2 pb-12 -mt-px">
+          <Reveal className="flex flex-col gap-6">
+            <div className="inline-flex self-start items-center gap-2 rounded-full px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+              <span className="text-[11px] font-medium text-white tracking-[0.14em] uppercase">
+                30 anos de missão
+              </span>
+            </div>
+
+            <blockquote className="type-h2 text-white">
+              &ldquo;Acredito que não existe poço tão fundo onde a graça de Deus
+              não possa alcançar. Minha missão não é apenas entregar um livro,
+              mas uma ferramenta que pode serrar as grades da alma.&rdquo;
+            </blockquote>
+
+            <p className="text-base text-white/85 leading-relaxed">
+              Antes do livro existir, foram 30 anos de campo. Joelhos no chão e
+              olhos nos olhos — em comunidades, presídios e casas onde a
+              clínica não chega e a teologia não fala.
+            </p>
+
+            <div className="flex flex-col gap-1 pt-2">
+              <p className="text-[18px] font-medium text-white tracking-tight">
+                Isaac Amar
+              </p>
+              <p className="text-sm text-white/70">
+                Autor de A Cura das Drogas
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* === DESKTOP === full-bleed cinematográfico com text overlay à esquerda */}
+      <section className="hidden md:block relative w-full overflow-hidden bg-ocean text-white">
+        <Image
+          src="/images/people/isaac2.webp"
+          alt="Isaac Amar"
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(15, 39, 72, 0.85) 0%, rgba(15, 39, 72, 0.5) 30%, rgba(15, 39, 72, 0.05) 55%, rgba(15, 39, 72, 0) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none"
+          style={{ background: "rgba(74, 159, 212, 0.18)" }}
+        />
+
+        <div className="relative container py-24 lg:py-32 min-h-[600px] lg:min-h-[720px] flex items-end">
+          <Reveal className="max-w-[640px] flex flex-col gap-7 lg:gap-9">
+            <div className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-white/10 backdrop-blur-md border border-white/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+              <span className="text-[11px] font-medium text-white tracking-[0.14em] uppercase">
+                30 anos de missão
+              </span>
+            </div>
+
+            <blockquote className="type-h2 text-white">
+              &ldquo;Acredito que não existe poço tão fundo onde a graça de Deus
+              não possa alcançar. Minha missão não é apenas entregar um livro,
+              mas uma ferramenta que pode serrar as grades da alma.&rdquo;
+            </blockquote>
+
+            <p className="text-base lg:text-lg text-white/85 leading-relaxed max-w-[560px]">
+              Antes do livro existir, foram 30 anos de campo. Joelhos no chão e
+              olhos nos olhos — em comunidades, presídios e casas onde a
+              clínica não chega e a teologia não fala.
+            </p>
+
+            <div className="flex flex-col gap-1 pt-2">
+              <p className="text-[18px] font-medium text-white tracking-tight">
+                Isaac Amar
+              </p>
+              <p className="text-sm text-white/70">
+                Autor de A Cura das Drogas
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
   )
 }

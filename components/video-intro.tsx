@@ -97,9 +97,9 @@ export function VideoIntro() {
             </div>
             
             <div className="pt-2 border-l-4 border-blue-200 pl-6">
-               <p className="text-base text-slate-500 italic">
+               <p className="text-base text-slate-500">
                  "Conhecereis a verdade, e a verdade vos libertará." <br/>
-                 <span className="text-sm font-semibold not-italic text-slate-900">— João 8:32</span>
+                 <span className="text-sm font-semibold text-slate-900">— João 8:32</span>
                </p>
             </div>
           </div>

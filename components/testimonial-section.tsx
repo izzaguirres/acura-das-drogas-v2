@@ -1,109 +1,109 @@
-import { Card } from "@/components/ui/card"
-import { Quote, Star } from "lucide-react"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+import Image from "next/image"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { StarIcon } from "@hugeicons/core-free-icons"
+import { Reveal } from "@/components/reveal"
+
+const featured = {
+  src: "/images/people/capelao.jpg",
+  name: "João Oliveira",
+  role: "Capelão prisional",
+  quote:
+    "Em 15 anos de ministério, nunca vi um material conectar tão rápido com a realidade deles. Não é teologia distante — é vida prática. Cada exemplar doado vale ouro lá dentro.",
+}
+
+const compact = {
+  initials: "CS",
+  name: "Carlos Silva",
+  role: "Ex-detento, líder comunitário",
+  quote:
+    "Eu achava que meu destino estava selado pelas grades. Este livro me deu uma chave para abrir a prisão que existia dentro da minha mente.",
+}
 
 export function TestimonialSection() {
-  const testimonials = [
-    {
-      name: "Carlos Silva",
-      role: "Ex-detento, hoje líder comunitário",
-      quote: "Eu achava que meu destino estava selado pelas grades. Este livro não me deu apenas palavras, me deu uma chave para abrir a prisão que existia dentro da minha mente. Hoje sou livre de verdade.",
-    },
-    {
-      name: "Maria Santos",
-      role: "Mãe de pessoa em recuperação",
-      quote: "Ver meu filho ler este livro e chorar de arrependimento foi o maior presente que recebi. A linguagem é simples, direta e toca na ferida com amor. É um manual de sobrevivência.",
-    },
-    {
-      name: "João Oliveira",
-      role: "Capelão prisional",
-      quote: "Em 15 anos de ministério, nunca vi um material conectar tão rápido com a realidade deles. Não é teologia distante, é vida prática. Cada exemplar doado vale ouro lá dentro.",
-    },
-    {
-      name: "Pedro Mendes",
-      role: "Recuperado há 5 anos",
-      quote: "A leitura deste livro foi o ponto de virada na minha vida. As histórias e os ensinamentos me deram forças para acreditar que a mudança era possível para mim também.",
-    },
-    {
-      name: "Ana Paula",
-      role: "Assistente Social",
-      quote: "Utilizo este material nos grupos de apoio e vejo transformações incríveis. É uma ferramenta poderosa que aborda a dependência com a profundidade e o respeito necessários.",
-    },
-  ]
-
   return (
-    <section className="py-24 bg-slate-50 relative overflow-hidden">
-       {/* Decorative background */}
-       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl opacity-60 mix-blend-multiply" />
-          <div className="absolute bottom-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl opacity-60 mix-blend-multiply" />
-       </div>
+    <section className="py-16 md:py-24 lg:py-32 bg-sky-50">
+      <div className="container">
+        <div className="flex flex-col gap-8 md:gap-10 lg:gap-14">
+          <Reveal className="flex flex-col gap-5 max-w-[640px]">
+            <span className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-white border border-sky-100">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="text-[11px] font-medium text-primary-800 tracking-[0.14em] uppercase">
+                Testemunhos reais
+              </span>
+            </span>
+            <h2 className="type-h2 text-foreground">
+              Vidas que o livro alcançou.
+            </h2>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Mais de 500 vidas em 30 anos.{" "}
+              <span className="text-foreground">Duas delas falam aqui.</span>
+            </p>
+          </Reveal>
 
-      <div className="container relative z-10">
-        <div className="text-center mb-16 space-y-4">
-           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary">
-            <Star className="mr-2 h-3 w-3 fill-primary" />
-            Histórias Reais
+          <div className="flex lg:grid lg:grid-cols-5 gap-5 lg:gap-6 items-stretch overflow-x-auto overflow-y-hidden lg:overflow-visible snap-x snap-mandatory lg:snap-none scroll-pl-5 lg:scroll-pl-0 touch-pan-x lg:touch-auto -mx-5 lg:mx-0 px-5 lg:px-0 pb-2 lg:pb-0 [&::-webkit-scrollbar]:hidden" style={{ overscrollBehaviorX: "contain" }}>
+            {/* Featured testimonial — 60% width */}
+            <article className="shrink-0 lg:shrink-0 w-[88%] sm:w-[65%] lg:w-auto snap-start lg:col-span-3 flex flex-col rounded-[28px] bg-card border border-border p-10 lg:p-12">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden className="mb-8">
+                <path
+                  d="M9.5 7.5c-1.6 0-2.9.7-3.9 2.1S4 12.6 4 14.4c0 1.4.4 2.5 1.2 3.3.8.8 1.8 1.2 3 1.2 1.1 0 2-.4 2.7-1.1.7-.7 1.1-1.7 1.1-2.9 0-1.1-.3-2-.9-2.7-.6-.7-1.4-1-2.4-1-.4 0-.7.1-.9.2-.2.1-.3.1-.4.1.1-.7.4-1.4.8-2 .5-.7 1-1.1 1.7-1.4l-.4-.6zm10 0c-1.6 0-2.9.7-3.9 2.1S14 12.6 14 14.4c0 1.4.4 2.5 1.2 3.3.8.8 1.8 1.2 3 1.2 1.1 0 2-.4 2.7-1.1.7-.7 1.1-1.7 1.1-2.9 0-1.1-.3-2-.9-2.7-.6-.7-1.4-1-2.4-1-.4 0-.7.1-.9.2-.2.1-.3.1-.4.1.1-.7.4-1.4.8-2 .5-.7 1-1.1 1.7-1.4l-.4-.6z"
+                  fill="hsl(var(--primary))"
+                  fillOpacity="0.18"
+                />
+              </svg>
+              <blockquote className="text-[24px] sm:text-[28px] font-light text-foreground leading-[1.4] tracking-[-0.02em] mb-8 flex-grow">
+                {featured.quote}
+              </blockquote>
+              <div className="flex items-center gap-4 pt-6 border-t border-border">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
+                  <Image
+                    src={featured.src}
+                    alt={featured.name}
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-base font-medium text-foreground tracking-tight">
+                    {featured.name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {featured.role}
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            {/* Compact testimonial — 40% width, with stars */}
+            <article className="shrink-0 lg:shrink-0 w-[88%] sm:w-[65%] lg:w-auto snap-start lg:col-span-2 flex flex-col rounded-[28px] bg-card border border-border p-10 lg:p-10">
+              <div className="flex gap-1 mb-6">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <HugeiconsIcon
+                    key={i}
+                    icon={StarIcon}
+                    size={16}
+                    strokeWidth={2}
+                    className="text-amber-400"
+                    style={{ fill: "currentColor" }}
+                  />
+                ))}
+              </div>
+              <blockquote className="text-[17px] text-foreground leading-[1.65] mb-8 flex-grow">
+                &ldquo;{compact.quote}&rdquo;
+              </blockquote>
+              <div className="flex items-center gap-3 pt-6 border-t border-border">
+                <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-sm font-medium text-primary-800 shrink-0">
+                  {compact.initials}
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-medium text-foreground tracking-tight">
+                    {compact.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{compact.role}</p>
+                </div>
+              </div>
+            </article>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
-            Vidas transformadas pela <br /><span className="text-primary">mensagem da cura</span>
-          </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            Não são apenas leitores, são testemunhas de que a recuperação é possível.
-          </p>
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 md:px-12">
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-6">
-                  <div className="h-full py-2">
-                    <Card className="relative p-8 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col">
-                      {/* Watermark Quote */}
-                      <Quote className="absolute top-4 right-6 w-12 h-12 text-slate-100 -z-0 rotate-180" />
-                      
-                      <div className="flex gap-1 mb-6 relative z-10">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star key={star} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                        ))}
-                      </div>
-
-                      <blockquote className="text-slate-600 text-lg leading-relaxed mb-8 flex-grow relative z-10">
-                        "{testimonial.quote}"
-                      </blockquote>
-
-                      <div className="flex items-center space-x-4 relative z-10 pt-6 border-t border-slate-50">
-                        <div className="w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center text-white shadow-md shrink-0">
-                          <span className="font-bold text-lg">
-                            {testimonial.name.charAt(0)}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="font-bold text-slate-900">{testimonial.name}</p>
-                          <p className="text-sm text-slate-500">{testimonial.role}</p>
-                        </div>
-                      </div>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-12" />
-            <CarouselNext className="hidden md:flex -right-12" />
-          </Carousel>
         </div>
       </div>
     </section>

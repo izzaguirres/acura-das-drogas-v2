@@ -1,149 +1,214 @@
 import type { Metadata } from "next"
-import { Card } from "@/components/ui/card"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Mail, MapPin, ArrowRight, Clock } from "lucide-react"
 import { ContactForm } from "@/components/contact-form"
 import { contacts } from "@/content/data"
-import Image from "next/image"
+import { Reveal } from "@/components/reveal"
+import { WaLink } from "@/components/wa-link"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  ArrowRight01Icon,
+  WhatsappIcon,
+  Mail01Icon,
+  Location01Icon,
+  Clock01Icon,
+} from "@hugeicons/core-free-icons"
 
 export const metadata: Metadata = {
   title: "Fale Conosco | A Cura das Drogas",
-  description: "Canais de atendimento do projeto A Cura das Drogas. WhatsApp, Email e Formulário. Fale com o autor ou solicite ajuda espiritual.",
+  description:
+    "WhatsApp direto com Isaac Amar, email e formulário. Sem nome, sem julgamento — só conversa.",
   keywords: [
     "contato a cura das drogas",
     "whatsapp projeto cura das drogas",
     "email cura das drogas",
-    "falar com pastor isac",
-    "ajuda para viciados whatsapp"
+    "falar com Isaac Amar",
   ],
   openGraph: {
-    title: "Estamos aqui para ouvir você",
-    description: "Seja para pedir ajuda, fazer uma doação ou tirar dúvidas, nossa equipe está pronta para conversar.",
-    images: [
-      {
-        url: "/images/header.png",
-        width: 1200,
-        height: 630,
-        alt: "Fale com a equipe do projeto",
-      },
-    ],
-  }
+    title: "Estamos aqui pra ouvir você",
+    description:
+      "Pedido de ajuda, doação ou parceria — fale conosco direto.",
+  },
 }
 
 export default function ContactPage() {
-  // JSON-LD para Página de Contato
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    "description": "Página de contato oficial do projeto A Cura das Drogas",
-    "mainEntity": {
+    description: "Página de contato oficial do projeto A Cura das Drogas",
+    mainEntity: {
       "@type": "Organization",
-      "name": "A Cura das Drogas",
-      "contactPoint": {
+      name: "A Cura das Drogas",
+      contactPoint: {
         "@type": "ContactPoint",
-        "telephone": "+34-673-01-75-00",
-        "contactType": "customer service",
-        "email": "colaboracao@acuradasdrogas.com.br",
-        "availableLanguage": ["Portuguese", "Spanish"]
-      }
-    }
+        telephone: "+34-673-01-75-00",
+        contactType: "customer service",
+        email: "colaboracao@acuradasdrogas.com.br",
+        availableLanguage: ["Portuguese", "Spanish"],
+      },
+    },
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
-      {/* Hero */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-slate-900">
-         <div className="absolute inset-0 opacity-30">
-            <Image 
-                src="/images/header.png" 
-                alt="Background de contato" 
-                fill 
-                className="object-cover"
-            />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 to-slate-900" />
-        
-        <div className="container relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
-            Vamos conversar?
-          </h1>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Seja para tirar dúvidas, pedir oração ou saber como apoiar o projeto, sua mensagem é muito importante para nós.
-          </p>
+
+      {/* === HERO === */}
+      <section className="relative w-full -mt-[76px] lg:-mt-[88px] bg-ocean text-white overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none"
+          style={{ background: "rgba(74, 159, 212, 0.22)" }}
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-40 -left-40 w-[420px] h-[420px] rounded-full blur-[100px] pointer-events-none"
+          style={{ background: "rgba(217, 74, 42, 0.12)" }}
+        />
+
+        <div className="relative container min-h-[420px] md:min-h-[500px] flex flex-col justify-end pb-12 md:pb-16 pt-32 md:pt-40 lg:pt-48">
+          <div className="max-w-[760px] flex flex-col gap-5 md:gap-6 animate-fade-up">
+            <div className="inline-flex self-start items-center gap-2 rounded-full px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+              <span className="text-[11px] font-medium text-white tracking-[0.14em] uppercase">
+                Contato
+              </span>
+            </div>
+
+            <h1 className="type-display text-white">
+              Fala direto.
+              <br />
+              <span className="font-light text-sky-100">Sem rodeio.</span>
+            </h1>
+
+            <p className="text-base md:text-lg text-white/85 leading-relaxed max-w-[560px]">
+              Pedido de ajuda, dúvida sobre o projeto, parceria ou doação — o
+              caminho é o mesmo. Escolha o canal que for mais cômodo pra você.
+            </p>
+          </div>
         </div>
       </section>
 
-      <div className="container -mt-10 relative z-20 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Info (Left Column) */}
-          <div className="lg:col-span-1 space-y-6">
-            <Card className="p-6 rounded-2xl shadow-lg border-none overflow-hidden relative group">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-green-100 rounded-bl-full -mr-4 -mt-4 opacity-50 transition-transform group-hover:scale-110" />
-                <div className="relative z-10">
-                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4 text-green-600">
-                        <MessageCircle className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-bold text-lg text-slate-900 mb-1">WhatsApp</h3>
-                    <p className="text-slate-500 text-sm mb-6">Fale diretamente com nossa equipe.</p>
-                    <Button asChild className="w-full bg-green-600 hover:bg-green-700 shadow-lg shadow-green-600/20">
-                      <a href="https://wa.me/+34673017500?text=Ol%C3%A1,%20vim%20do%20site%20e%20gostaria%20de%20saber%20mais!" target="_blank" rel="noopener noreferrer">
-                        Iniciar Conversa <ArrowRight className="ml-2 w-4 h-4" />
-                      </a>
-                    </Button>
+      {/* === Canais de contato + Form === */}
+      <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <div className="container">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* Channels */}
+            <div className="lg:col-span-5 flex flex-col gap-5 md:gap-6">
+              <Reveal className="flex flex-col gap-5 p-7 md:p-8 rounded-[28px] bg-consejero-soft">
+                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-consejero">
+                  <HugeiconsIcon icon={WhatsappIcon} size={22} strokeWidth={1.8} />
                 </div>
-            </Card>
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-[20px] md:text-[22px] font-medium text-foreground tracking-tight">
+                    WhatsApp direto com Isaac
+                  </h3>
+                  <p className="text-[15px] text-muted-foreground leading-relaxed">
+                    Sem nome, sem julgamento, sem custo. Resposta dele mesmo.
+                  </p>
+                </div>
+                <Button
+                  asChild
+                  className="self-start rounded-full h-12 px-6 bg-consejero hover:bg-consejero/90 text-consejero-foreground shadow-consejero gap-2 font-medium"
+                >
+                  <WaLink
+                    href={`https://wa.me/${contacts.whatsapp}?text=Ol%C3%A1,%20vim%20do%20site!`}
+                    source="contato"
+                    intent="ajuda"
+                  >
+                    <HugeiconsIcon icon={WhatsappIcon} size={18} strokeWidth={2} />
+                    Conversar agora
+                  </WaLink>
+                </Button>
+              </Reveal>
 
-            <Card className="p-6 rounded-2xl shadow-lg border-none overflow-hidden relative group">
-                 <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-bl-full -mr-4 -mt-4 opacity-50 transition-transform group-hover:scale-110" />
-                 <div className="relative z-10">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4 text-blue-600">
-                        <Mail className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-bold text-lg text-slate-900 mb-1">Email</h3>
-                    <p className="text-slate-500 text-sm mb-6">Para parcerias e assuntos institucionais.</p>
-                    <a href={`mailto:${contacts.email}`} className="text-blue-600 font-medium hover:underline break-all">
-                        {contacts.email}
-                    </a>
+              <Reveal delay={0.1} className="flex flex-col gap-5 p-7 md:p-8 rounded-[28px] bg-primary-50">
+                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary">
+                  <HugeiconsIcon icon={Mail01Icon} size={22} strokeWidth={1.8} />
                 </div>
-            </Card>
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-[20px] md:text-[22px] font-medium text-foreground tracking-tight">
+                    Email
+                  </h3>
+                  <p className="text-[15px] text-muted-foreground leading-relaxed">
+                    Parcerias institucionais, capelania, imprensa.
+                  </p>
+                </div>
+                <a
+                  href={`mailto:${contacts.email}`}
+                  className="text-[15px] font-medium text-primary-800 hover:text-primary break-all"
+                >
+                  {contacts.email}
+                </a>
+              </Reveal>
 
-            <Card className="p-6 rounded-2xl shadow-sm border-slate-200 bg-slate-900 text-white">
-                <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                        <MapPin className="w-5 h-5 text-slate-400 mt-1" />
-                        <div>
-                            <h4 className="font-bold mb-1">Localização</h4>
-                            <p className="text-slate-400 text-sm">Projeto com base na Espanha e no Brasil.</p>
-                        </div>
-                    </div>
-                     <div className="flex items-start gap-4">
-                        <Clock className="w-5 h-5 text-slate-400 mt-1" />
-                        <div>
-                            <h4 className="font-bold mb-1">Atendimento</h4>
-                            <p className="text-slate-400 text-sm">Segunda a Sexta: 9h às 18h</p>
-                        </div>
-                    </div>
+              <Reveal delay={0.2} className="flex flex-col gap-4 p-7 rounded-[28px] bg-ocean text-white">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0 mt-0.5">
+                    <HugeiconsIcon icon={Location01Icon} size={18} strokeWidth={1.8} />
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-[15px] font-medium text-white">Onde estamos</p>
+                    <p className="text-sm text-sky-100/80 leading-relaxed">
+                      Florianópolis (Brasil) &amp; Espanha
+                    </p>
+                  </div>
                 </div>
-            </Card>
-          </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0 mt-0.5">
+                    <HugeiconsIcon icon={Clock01Icon} size={18} strokeWidth={1.8} />
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-[15px] font-medium text-white">Atendimento</p>
+                    <p className="text-sm text-sky-100/80 leading-relaxed">
+                      Segunda a sexta, 9h–18h (horário de Brasília)
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
 
-          {/* Contact Form (Right Column) */}
-          <div className="lg:col-span-2">
-            <Card className="p-8 rounded-2xl shadow-xl border-none bg-white">
-                <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-slate-900">Envie uma Mensagem</h2>
-                    <p className="text-slate-500">Preencha o formulário abaixo e responderemos o mais breve possível.</p>
-                </div>
-                <ContactForm />
-            </Card>
+            {/* Form */}
+            <Reveal className="lg:col-span-7 flex flex-col gap-6 p-7 md:p-10 rounded-[28px] bg-card border border-border">
+              <div className="flex flex-col gap-2">
+                <h2 className="type-h3 text-foreground">Prefere escrever?</h2>
+                <p className="text-[15px] text-muted-foreground leading-relaxed">
+                  Preenche o formulário e a gente responde em até 48h.
+                </p>
+              </div>
+              <ContactForm />
+            </Reveal>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* === CTA fechamento === */}
+      <section className="py-16 md:py-20 bg-background">
+        <div className="container">
+          <div className="rounded-[28px] bg-sky-50 p-8 md:p-12 lg:p-16 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex flex-col gap-2 max-w-[560px]">
+              <h3 className="type-h3 text-foreground">
+                Quer ver mais antes de falar?
+              </h3>
+              <p className="text-[15px] text-muted-foreground leading-relaxed">
+                Conheça o projeto e como sua doação vira livro na cela.
+              </p>
+            </div>
+            <Button
+              asChild
+              className="self-start rounded-full h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-brand gap-2 font-medium shrink-0"
+            >
+              <Link href="/o-projeto">
+                Conhecer o projeto
+                <HugeiconsIcon icon={ArrowRight01Icon} size={18} strokeWidth={2} />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }

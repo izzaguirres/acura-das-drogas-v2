@@ -1,265 +1,488 @@
 import type { Metadata } from "next"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Target, Users, Heart, PlayIcon as Pray, HandHeart, ArrowRight, CheckCircle, Globe, ShieldCheck } from "lucide-react"
-import { actionPlan } from "@/content/data"
-import Link from "next/link"
 import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { FinalCta } from "@/components/final-cta"
+import { Reveal } from "@/components/reveal"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowRight01Icon, WhatsappIcon } from "@hugeicons/core-free-icons"
+import { WaLink } from "@/components/wa-link"
 
 export const metadata: Metadata = {
   title: "O Projeto | Missão de Evangelização Carcerária",
   description:
-    "Conheça nossa missão de evangelizar pessoas encarceradas na Espanha e no Brasil através do livro A Cura das Drogas. Reabilitação com propósito.",
+    "Há 30 anos levando o livro A Cura das Drogas para presídios no Brasil e na Espanha. Conheça a missão, o plano de ação e como participar.",
   keywords: [
     "missão em presídios",
     "projeto cura das drogas",
     "evangelização prisional",
-    "ong reabilitação",
     "voluntariado prisões",
-    "impacto social drogas"
+    "Isaac Amar",
   ],
   openGraph: {
-    title: "Projeto A Cura das Drogas: Missão Global",
-    description: "Nosso objetivo é alcançar vidas esquecidas pelo sistema, levando dignidade e cura espiritual.",
+    title: "Projeto A Cura das Drogas — desde 1994",
+    description:
+      "Levando uma mensagem de transformação para quem o sistema esqueceu.",
     images: [
       {
-        url: "/images/grupo.png",
+        url: "/images/people/evangelizacao.webp",
         width: 1200,
         height: 630,
-        alt: "Equipe do projeto A Cura das Drogas",
+        alt: "Projeto A Cura das Drogas",
       },
     ],
-  }
+  },
 }
 
-export default function ProjectPage() {
-  const engagementCards = [
-    {
-      icon: HandHeart,
-      title: "Colabore",
-      description: "Faça uma doação para impressão e distribuição dos livros",
-      action: "Doar Agora",
-      href: "/doar",
-      color: "text-rose-600",
-      bg: "bg-rose-100",
-    },
-    {
-      icon: Pray,
-      title: "Ore",
-      description: "Interceda pelas pessoas encarceradas e pelo sucesso do projeto",
-      action: "Saiba Como",
-      href: "/contato",
-      color: "text-indigo-600",
-      bg: "bg-indigo-100",
-    },
-    {
-      icon: Users,
-      title: "Engaje-se",
-      description: "Participe ativamente da distribuição e acompanhamento",
-      action: "Entre em Contato",
-      href: "/contato",
-      color: "text-amber-600",
-      bg: "bg-amber-100",
-    },
-  ]
+// TODO: substituir pelos dados reais que o Isaac tiver — provisório baseado no PDF.
+const impactStats = [
+  { value: "500+", label: "Livros já entregues em presídios" },
+  { value: "2", label: "Países atendidos" },
+  { value: "30 anos", label: "Atuando no campo" },
+  { value: "100%", label: "Distribuição gratuita" },
+]
 
-  // JSON-LD para o Projeto (Organization/NGO)
+// TODO: confirmar lista real de cidades/unidades com Isaac
+const reachLocations = {
+  brasil: ["Florianópolis", "São Paulo", "Rio de Janeiro", "Porto Alegre"],
+  espanha: ["Madrid", "Ibiza", "Barcelona"],
+}
+
+const partnerPresses = [
+  {
+    name: "Punto Rojo Libros",
+    country: "Espanha",
+    flag: "🇪🇸",
+    role: "Gráfica oficial das edições em espanhol — Madrid",
+  },
+  {
+    name: "Maistype Gráfica",
+    country: "Brasil",
+    flag: "🇧🇷",
+    role: "Gráfica oficial das edições em português — São Paulo",
+  },
+]
+
+const ways = [
+  {
+    title: "Colabore",
+    body: "Sua doação imprime e leva o livro pra dentro de presídios. Cerca de R$ 30 financia 1 exemplar entregue.",
+    cta: "Doar agora",
+    href: "/doar",
+    primary: true,
+  },
+  {
+    title: "Ore",
+    body: "A oração é parte da missão. Interceda pelas pessoas encarceradas e pelo Isaac que vai até onde a clínica não chega.",
+    cta: "Acompanhar no Instagram",
+    href: "https://www.instagram.com/acuradasdrogas",
+    primary: false,
+  },
+  {
+    title: "Engaje-se",
+    body: "Capelão, líder de igreja, voluntário. Se você tem acesso a um presídio que precisa receber, fala com a gente.",
+    cta: "Falar no WhatsApp",
+    href: "https://wa.me/+34673017500?text=Ol%C3%A1,%20gostaria%20de%20engajar%20com%20o%20projeto.",
+    primary: false,
+  },
+]
+
+const journey = [
+  {
+    num: "01",
+    title: "Identificar",
+    body: "Mapeamos a unidade prisional certa — não a maior, a que mais precisa. Buscamos quem vai receber o livro com peso.",
+    src: "/images/people/levantamento.webp",
+  },
+  {
+    num: "02",
+    title: "Imprimir",
+    body: "Trabalho com gráficas parceiras na Espanha (Punto Rojo) e no Brasil (Maistype). Edições idênticas, custo unitário transparente.",
+    src: "/images/people/edicao.webp",
+  },
+  {
+    num: "03",
+    title: "Entregar pessoalmente",
+    body: "O livro chega na mão de quem precisa, não no portão da unidade. Sem caixa anônima, sem despacho frio. Olho no olho, livro na mão.",
+    src: "/images/people/evangelizacao.webp",
+  },
+]
+
+export default function ProjectPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
-    "name": "Projeto A Cura das Drogas",
-    "url": "https://acuradasdrogas.com/o-projeto",
-    "logo": "https://acuradasdrogas.com/images/logo.png",
-    "description": "Organização dedicada à evangelização e reabilitação espiritual de detentos.",
-    "areaServed": ["BR", "ES"],
-    "knowsAbout": ["Reabilitação de Drogas", "Capelania Prisional", "Apoio Familiar"]
+    name: "A Cura das Drogas",
+    url: "https://acuradasdrogas.com/o-projeto",
+    logo: "https://acuradasdrogas.com/images/logo.png",
+    description:
+      "Projeto social do Isaac Amar — desde 1994 levando esperança a quem está atrás das grades, no Brasil e na Espanha.",
+    foundingDate: "1994",
+    areaServed: ["BR", "ES"],
+    knowsAbout: ["Reabilitação de Drogas", "Capelania Prisional", "Apoio Familiar"],
   }
 
   return (
-    <div className="bg-white">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 opacity-20">
-            <Image 
-                src="/images/grupo.png" 
-                alt="Grupo de voluntários e pessoas impactadas" 
-                fill 
-                className="object-cover object-center"
-            />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/90 to-slate-900" />
-        
-        <div className="container relative z-10 text-center">
-          <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-sm font-medium text-blue-400 mb-6 backdrop-blur-sm">
-            <Globe className="mr-2 h-4 w-4" />
-            Missão Global
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 max-w-4xl mx-auto leading-tight">
-            Levando cura e esperança para <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">além das grades</span>
-          </h1>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Uma missão de transformação espiritual para alcançar pessoas encarceradas com uma mensagem prática de superação e fé.
-          </p>
-        </div>
-      </section>
 
-      {/* Objective & Goal */}
-      <section className="py-20 lg:py-24">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="space-y-8">
-                <div className="space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Nossa Visão</h2>
-                    <p className="text-lg text-slate-600 leading-relaxed">
-                        Acreditamos que a verdadeira reabilitação começa de dentro para fora. Nosso foco não é apenas o combate às drogas, mas a restauração da identidade e dignidade humana.
-                    </p>
-                </div>
-                
-                <div className="space-y-6">
-                    <div className="flex gap-4 items-start">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                            <Target className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">Nosso Objetivo</h3>
-                            <p className="text-slate-600">Evangelizar pessoas encarceradas, oferecendo suporte espiritual e uma mensagem prática de superação de vícios.</p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4 items-start">
-                         <div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center shrink-0">
-                            <Heart className="w-6 h-6 text-rose-600" />
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">Nossa Meta</h3>
-                             <p className="text-slate-600">Distribuir milhares de exemplares do livro "A Cura das Drogas" em presídios, onde a esperança é mais necessária.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="relative lg:h-[600px] w-full h-[400px] rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                    src="/images/bookhand.png"
-                    alt="Mãos segurando o livro A Cura das Drogas"
-                    fill
-                    className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
-                    <p className="text-white font-medium text-lg">"Eu estava preso, e fostes ver-me." — Mateus 25:36</p>
-                </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* === HERO === */}
+      <section className="relative w-full overflow-hidden -mt-[76px] lg:-mt-[88px] bg-ocean">
+        <Image
+          src="/images/people/evangelizacao.webp"
+          alt="Distribuição do livro em presídios"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center -z-20"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(15, 39, 72, 0.55) 0%, rgba(15, 39, 72, 0.7) 60%, rgba(15, 39, 72, 0.95) 100%)",
+          }}
+        />
 
-      {/* Action Plan */}
-      <section className="py-20 bg-slate-50">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4 text-slate-900">Plano de Ação</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Três passos estratégicos para garantir que a mensagem chegue com eficácia e gere frutos duradouros.
+        <div className="relative container min-h-[520px] md:min-h-[620px] lg:min-h-[680px] flex flex-col justify-end pb-12 md:pb-16 lg:pb-20 pt-32 md:pt-40 lg:pt-48">
+          <div className="max-w-[760px] flex flex-col gap-5 md:gap-7 animate-fade-up">
+            <div className="inline-flex self-start items-center gap-2 rounded-full px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+              <span className="text-[11px] font-medium text-white tracking-[0.14em] uppercase">
+                O Projeto
+              </span>
+            </div>
+
+            <h1 className="type-display text-white">
+              Onde a clínica não chega,
+              <br />
+              <span className="font-light text-sky-100">esse livro chega.</span>
+            </h1>
+
+            <p className="text-base md:text-lg text-white/90 leading-relaxed max-w-[600px]">
+              Há 30 anos, Isaac Amar leva uma mensagem de transformação para
+              dentro de presídios, comunidades e casas onde a sociedade prefere
+              não olhar. O livro é a ferramenta — o projeto é o caminho até
+              quem precisa.
             </p>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* Connection Line (Desktop) */}
-            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200 border-t-2 border-dashed border-slate-300 -z-0" />
+      {/* === Como nasceu === */}
+      <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <div className="container">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+            <Reveal className="lg:col-span-5 flex flex-col gap-5">
+              <span className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-background border border-border">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="text-[11px] font-medium text-muted-foreground tracking-[0.14em] uppercase">
+                  Como nasceu
+                </span>
+              </span>
+              <h2 className="type-h2 text-foreground">
+                30 anos antes do livro existir.
+              </h2>
+            </Reveal>
 
-            {actionPlan.map((step, index) => (
-              <div key={index} className="relative z-10 group">
-                <Card className="p-8 rounded-2xl text-center hover:shadow-xl transition-all duration-300 border-slate-100 bg-white h-full hover:-translate-y-1">
-                  <div className="w-24 h-24 bg-white border-4 border-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:border-primary/20 group-hover:scale-110 transition-all">
-                    <span className="text-4xl font-bold text-primary">{step.step}</span>
+            <Reveal delay={0.1} className="lg:col-span-7 flex flex-col gap-5 text-[16px] md:text-[17px] text-muted-foreground leading-relaxed">
+              <p>
+                Em meados de <strong className="text-foreground">1994</strong>,
+                começamos a acolher pessoas em situação de vulnerabilidade
+                social e vício em drogas. Eram joelhos no chão, olhos nos
+                olhos, em comunidades, presídios e casas de família.
+              </p>
+              <p>
+                Ao longo de duas décadas, ouvindo histórias, perdendo pessoas,
+                vendo outras se erguerem, ficou claro o que faltava: um caminho
+                que não tratasse o vício como sentença, nem como doença sem
+                cura. Algo que reconhecesse a{" "}
+                <strong className="text-foreground">
+                  raiz espiritual do vazio
+                </strong>{" "}
+                que alimenta o uso.
+              </p>
+              <p>
+                Desse acúmulo nasceu o livro <em>A Cura das Drogas</em>. Não é
+                teoria de gabinete — é manual de cabeceira escrito por quem
+                viveu o campo. Hoje o projeto entrega esses livros, gratuita e
+                presencialmente, dentro de unidades prisionais no Brasil e na
+                Espanha.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* === Como o livro chega à cela (narrativa) === */}
+      <section className="py-16 md:py-24 lg:py-32 bg-sky-50">
+        <div className="container">
+          <div className="flex flex-col gap-10 md:gap-14">
+            <Reveal className="flex flex-col gap-5 max-w-[640px]">
+              <span className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-white border border-sky-100">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="text-[11px] font-medium text-primary-800 tracking-[0.14em] uppercase">
+                  O caminho
+                </span>
+              </span>
+              <h2 className="type-h2 text-foreground">
+                Como o livro chega à cela.
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                Três etapas executadas na mão. Sem terceirização da última milha
+                — quem manda imprimir é quem vai entregar.
+              </p>
+            </Reveal>
+
+            <div className="flex flex-col gap-12 md:gap-16">
+              {journey.map((step, i) => (
+                <Reveal
+                  key={step.num}
+                  delay={0.05}
+                  className={`grid md:grid-cols-12 gap-6 md:gap-12 items-center ${
+                    i % 2 === 1 ? "md:[direction:rtl]" : ""
+                  }`}
+                >
+                  <div className="md:col-span-6 [direction:ltr]">
+                    <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden">
+                      <Image
+                        src={step.src}
+                        alt={step.title}
+                        fill
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-slate-900">{step.title}</h3>
-                  <p className="text-slate-500 leading-relaxed">{step.description}</p>
-                </Card>
+                  <div className="md:col-span-6 [direction:ltr] flex flex-col gap-4">
+                    <span className="text-[40px] md:text-[48px] font-light text-primary leading-none tracking-[-0.04em]">
+                      {step.num}
+                    </span>
+                    <h3 className="text-[24px] md:text-[28px] font-medium text-foreground tracking-tight">
+                      {step.title}
+                    </h3>
+                    <p className="text-[16px] text-muted-foreground leading-relaxed max-w-[480px]">
+                      {step.body}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* === Onde já chegamos === */}
+      <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <div className="container">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+            <Reveal className="lg:col-span-5 flex flex-col gap-5">
+              <span className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-background border border-border">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="text-[11px] font-medium text-muted-foreground tracking-[0.14em] uppercase">
+                  Alcance
+                </span>
+              </span>
+              <h2 className="type-h2 text-foreground">Onde já chegamos.</h2>
+              <p className="text-base text-muted-foreground leading-relaxed max-w-[440px]">
+                Cada cidade abaixo tem unidades prisionais que receberam o livro
+                — fisicamente, na mão de quem precisava.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.1} className="lg:col-span-7 flex flex-col gap-6">
+              <div className="flex flex-col gap-5 p-7 md:p-8 rounded-[24px] bg-card border border-border">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🇧🇷</span>
+                  <h3 className="text-[18px] font-medium text-foreground tracking-tight">
+                    Brasil
+                  </h3>
+                </div>
+                <ul className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {reachLocations.brasil.map((c) => (
+                    <li
+                      key={c}
+                      className="text-[15px] text-muted-foreground py-1.5 px-3 rounded-full bg-sky-50 inline-block"
+                    >
+                      {c}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Why It Matters */}
-      <section className="py-20">
-        <div className="container">
-           <div className="bg-slate-900 rounded-3xl overflow-hidden text-white relative">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-rose-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
-                
-                <div className="grid lg:grid-cols-2 gap-12 p-8 lg:p-16 relative z-10 items-center">
-                    <div>
-                        <h2 className="text-3xl lg:text-4xl font-bold mb-6">Por que isso importa?</h2>
-                        <p className="text-lg text-slate-300 mb-8 leading-relaxed">
-                            Muitos métodos de tratamento ignoram a dimensão espiritual do ser humano. O vazio existencial muitas vezes permanece. Nossa abordagem preenche essa lacuna.
-                        </p>
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 text-slate-200">
-                                <ShieldCheck className="w-5 h-5 text-green-400" />
-                                <span>Abordagem complementar ao tratamento clínico</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-slate-200">
-                                <ShieldCheck className="w-5 h-5 text-green-400" />
-                                <span>Foco na dignidade e escolha pessoal</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-slate-200">
-                                <ShieldCheck className="w-5 h-5 text-green-400" />
-                                <span>Fundamentado em valores cristãos de amor</span>
-                            </div>
-                        </div>
-                    </div>
-                     <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/10">
-                        <h3 className="text-xl font-bold mb-4 text-white">O Impacto Real</h3>
-                         <p className="text-slate-300 mb-6">
-                            "Quando li o livro na prisão, entendi que poderia estar preso fisicamente, mas minha mente poderia ser livre. Foi o início da minha recuperação."
-                        </p>
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">R</div>
-                            <div>
-                                <p className="font-bold text-white">Roberto M.</p>
-                                <p className="text-sm text-blue-200">Ex-interno</p>
-                            </div>
-                        </div>
-                    </div>
+              <div className="flex flex-col gap-5 p-7 md:p-8 rounded-[24px] bg-card border border-border">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🇪🇸</span>
+                  <h3 className="text-[18px] font-medium text-foreground tracking-tight">
+                    Espanha
+                  </h3>
                 </div>
-           </div>
+                <ul className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {reachLocations.espanha.map((c) => (
+                    <li
+                      key={c}
+                      className="text-[15px] text-muted-foreground py-1.5 px-3 rounded-full bg-sky-50 inline-block"
+                    >
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <p className="text-[12px] text-muted-foreground italic">
+                * Lista em consolidação com Isaac. Em breve com unidades nominais
+                e datas de entrega.
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-20 bg-slate-50">
+      {/* === Impacto (stats próprios do projeto) === */}
+      <section className="py-12 md:py-20 bg-background">
         <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-slate-900">Como Você Pode Participar</h2>
-            <p className="text-lg text-slate-600">Escolha como você quer fazer a diferença hoje</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {engagementCards.map((card, index) => (
-              <Card key={index} className="p-8 rounded-2xl text-center hover:shadow-xl transition-all duration-300 border-none shadow-md flex flex-col items-center">
-                <div className={`w-16 h-16 ${card.bg} rounded-2xl flex items-center justify-center mb-6 transform rotate-3 hover:rotate-6 transition-transform`}>
-                  <card.icon className={`w-8 h-8 ${card.color}`} />
+          <Reveal className="relative rounded-[28px] overflow-hidden bg-ocean text-white p-10 lg:p-14">
+            <div
+              aria-hidden
+              className="absolute -top-48 -right-48 w-[500px] h-[500px] rounded-full blur-[80px]"
+              style={{ background: "rgba(74, 159, 212, 0.20)" }}
+            />
+            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 items-start">
+              {impactStats.map((s, i) => (
+                <div
+                  key={s.value}
+                  className={`flex flex-col gap-3 px-0 lg:px-8 ${
+                    i > 0 ? "lg:border-l lg:border-white/10" : ""
+                  }`}
+                >
+                  <div className="text-[40px] sm:text-[48px] lg:text-[58px] font-light text-white leading-[1] tracking-[-0.03em] whitespace-nowrap">
+                    {s.value}
+                  </div>
+                  <p className="text-sm text-sky-100/90 leading-[1.45] max-w-[220px] min-h-[42px]">
+                    {s.label}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-slate-900">{card.title}</h3>
-                <p className="text-slate-500 mb-8 leading-relaxed">{card.description}</p>
-                <Button asChild className="w-full mt-auto" variant={index === 0 ? "default" : "outline"}>
-                  <Link href={card.href}>
-                    {card.action} 
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-              </Card>
-            ))}
-          </div>
-           <div className="mt-16 text-center border-t border-slate-200 pt-8">
-             <p className="text-sm text-slate-500">Baseado em dados de população carcerária do World Prison Brief e estatísticas locais.</p>
-           </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
-    </div>
+
+      {/* === Gráficas parceiras === */}
+      <section className="py-16 md:py-24 bg-sky-50">
+        <div className="container">
+          <div className="flex flex-col gap-10 md:gap-12">
+            <Reveal className="flex flex-col gap-5 max-w-[640px]">
+              <span className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-white border border-sky-100">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="text-[11px] font-medium text-primary-800 tracking-[0.14em] uppercase">
+                  Quem imprime
+                </span>
+              </span>
+              <h2 className="type-h2 text-foreground">
+                Gráficas parceiras nominais.
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                Não usamos serviço genérico. Cada exemplar sai de uma das duas
+                gráficas abaixo — com nome, com responsável, com número.
+              </p>
+            </Reveal>
+
+            <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+              {partnerPresses.map((p, i) => (
+                <Reveal
+                  key={p.name}
+                  delay={i * 0.1}
+                  className="flex flex-col gap-5 p-8 md:p-10 rounded-[24px] bg-card border border-border"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{p.flag}</span>
+                    <div className="flex flex-col">
+                      <span className="text-[11px] font-medium text-muted-foreground tracking-[0.14em] uppercase">
+                        {p.country}
+                      </span>
+                      <h3 className="text-[20px] md:text-[22px] font-medium text-foreground tracking-tight leading-tight">
+                        {p.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-[15px] text-muted-foreground leading-relaxed">
+                    {p.role}
+                  </p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* === 3 formas de participar === */}
+      <section className="py-16 md:py-24 lg:py-32 bg-background">
+        <div className="container">
+          <div className="flex flex-col gap-10 md:gap-14">
+            <Reveal className="flex flex-col gap-5 max-w-[640px]">
+              <span className="inline-flex self-start items-center gap-2 rounded-full px-3.5 py-2 bg-background border border-border">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="text-[11px] font-medium text-muted-foreground tracking-[0.14em] uppercase">
+                  Como participar
+                </span>
+              </span>
+              <h2 className="type-h2 text-foreground">
+                Três formas de fazer parte.
+              </h2>
+            </Reveal>
+
+            <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+              {ways.map((w, i) => (
+                <Reveal
+                  key={w.title}
+                  delay={i * 0.12}
+                  className="flex flex-col gap-6 p-8 lg:p-10 rounded-[28px] bg-card border border-border"
+                >
+                  <h3 className="text-[24px] md:text-[28px] font-medium text-foreground tracking-[-0.02em] leading-[1.18]">
+                    {w.title}
+                  </h3>
+                  <p className="text-[15px] text-muted-foreground leading-relaxed flex-grow">
+                    {w.body}
+                  </p>
+                  <Button
+                    asChild
+                    className={
+                      w.primary
+                        ? "self-start rounded-full h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-brand gap-2 font-medium"
+                        : "self-start rounded-full h-12 px-6 bg-foreground hover:bg-foreground/90 text-background gap-2 font-medium"
+                    }
+                  >
+                    {w.href.startsWith("https://wa.me") ? (
+                      <WaLink href={w.href} source="o_projeto" intent="engajar">
+                        <HugeiconsIcon icon={WhatsappIcon} size={18} strokeWidth={2} />
+                        {w.cta}
+                      </WaLink>
+                    ) : w.href.startsWith("http") ? (
+                      <a href={w.href} target="_blank" rel="noopener noreferrer">
+                        {w.cta}
+                        <HugeiconsIcon icon={ArrowRight01Icon} size={18} strokeWidth={2} />
+                      </a>
+                    ) : (
+                      <Link href={w.href}>
+                        {w.cta}
+                        <HugeiconsIcon icon={ArrowRight01Icon} size={18} strokeWidth={2} />
+                      </Link>
+                    )}
+                  </Button>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* === Bifurcação dual CTA === */}
+      <FinalCta />
+    </>
   )
 }
